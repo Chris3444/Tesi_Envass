@@ -1,0 +1,28 @@
+\contentsline {chapter}{\numberline {1}Introduzione}{2}{}%
+\contentsline {chapter}{\numberline {2}Background}{3}{}%
+\contentsline {section}{\numberline {2.1}Evoluzione del Web e Tecnologie Client-Side}{3}{}%
+\contentsline {subsection}{\numberline {2.1.1}Il linguaggio di marcatura HTML:}{3}{}%
+\contentsline {subsection}{\numberline {2.1.2}La formattazione tramite CSS:}{3}{}%
+\contentsline {subsection}{\numberline {2.1.3}Framework per il Design Responsivo: Bootstrap:}{3}{}%
+\contentsline {subsection}{\numberline {2.1.4}Interattività tramite JavaScript:}{3}{}%
+\contentsline {section}{\numberline {2.2}Sviluppo Lato Server e Linguaggio PHP}{4}{}%
+\contentsline {subsection}{\numberline {2.2.1}Linguaggi di Scripting Server-Side:}{4}{}%
+\contentsline {subsection}{\numberline {2.2.2}Il linguaggio PHP:}{4}{}%
+\contentsline {subsection}{\numberline {2.2.3}Gestione delle Dipendenze con Composer:}{4}{}%
+\contentsline {section}{\numberline {2.3}Architettura del Framework Laravel}{4}{}%
+\contentsline {subsection}{\numberline {2.3.1}Il Pattern Architetturale MVC (Model-View-Controller):}{4}{}%
+\contentsline {subsubsection}{Model:}{4}{}%
+\contentsline {subsubsection}{View:}{4}{}%
+\contentsline {subsubsection}{Controller:}{4}{}%
+\contentsline {subsection}{\numberline {2.3.2}Il Ciclo di Vita della Richiesta (Request Lifecycle):}{5}{}%
+\contentsline {subsubsection}{Routing:}{5}{}%
+\contentsline {subsubsection}{Middleware:}{5}{}%
+\contentsline {subsection}{\numberline {2.3.3}Service Layer e Dependency Injection:}{5}{}%
+\contentsline {section}{\numberline {2.4}Persistenza dei Dati e Database Relazionali}{5}{}%
+\contentsline {subsection}{\numberline {2.4.1}Sistemi di Gestione di Database (RDBMS):}{5}{}%
+\contentsline {subsection}{\numberline {2.4.2}Eloquent ORM (Object-Relational Mapping):}{5}{}%
+\contentsline {subsubsection}{Relazioni tra Entità:}{5}{}%
+\contentsline {subsection}{\numberline {2.4.3}Versionamento del Database: Migrations:}{5}{}%
+\contentsline {chapter}{\numberline {3}Progetto}{6}{}%
+\contentsline {chapter}{\numberline {4}Implementazione del progetto}{7}{}%
+\contentsline {chapter}{\numberline {5}Conclusione}{8}{}%
