@@ -1,50 +1,9 @@
 \chapter{Background}
 
-\section{Evoluzione del Web e Tecnologie Client-Side}
-In questa sezione si analizzano i pilastri dell'interfaccia utente, spiegando come il browser interpreta i dati.
+\input{Background_parts/Frontend}
 
-\subsection{Il linguaggio di marcatura HTML:} Definizione di struttura ipertestuale e versionamento (HTML5).\autocite{HTMLStandard}
-\subsection{La formattazione tramite CSS:} Separazione tra contenuto e presentazione.
-
-\subsection{Framework per il Design Responsivo: Bootstrap:} L'importanza dei sistemi a griglia e della compatibilità cross-device.
-
-\subsection{Interattività tramite JavaScript:} Evoluzione del linguaggio da script lato client a motore per applicazioni moderne.
-
-\section{Sviluppo Lato Server e Linguaggio PHP}
-Questa sezione giustifica la scelta tecnologica di base.
-
-\subsection{Linguaggi di Scripting Server-Side:} Differenza tra elaborazione client e server.
-
-\subsection{Il linguaggio PHP:} Storia, diffusione nel web moderno e caratteristiche della versione utilizzata nel progetto.
-
-\subsection{Gestione delle Dipendenze con Composer:} Fondamentale per spiegare come Laravel integra librerie esterne.
+\input{Background_parts/PHP}
 	
-\section{Architettura del Framework Laravel}
-Il nucleo centrale del background. Qui si approfondisce la teoria del framework.
+\input{Background_parts/Laravel}
 
-\subsection{Il Pattern Architetturale MVC (Model-View-Controller):}
-
-\subsubsection{Model:} Rappresentazione dei dati e logica di business.
-
-\subsubsection{View:} Il sistema di templating (Blade) e la presentazione.
-
-\subsubsection{Controller:} Intermediazione e gestione del flusso applicativo.
-
-\subsection{Il Ciclo di Vita della Richiesta (Request Lifecycle):}
-
-\subsubsection{Routing:} Definizione degli endpoint e smistamento del traffico.
-
-\subsubsection{Middleware:} Spiegazione dei filtri di sicurezza e autenticazione.
-
-\subsection{Service Layer e Dependency Injection:} Approfondimento su come disaccoppiare la logica dai controller (essenziale per una tesi di alto livello).
-
-\section{Persistenza dei Dati e Database Relazionali}
-Spiegazione di come le informazioni vengono salvate e recuperate.
-
-\subsection{Sistemi di Gestione di Database (RDBMS):} Teoria dei database relazionali e linguaggio SQL.
-
-\subsection{Eloquent ORM (Object-Relational Mapping):} Come Laravel trasforma le tabelle del database in oggetti manipolabili.
-
-\subsubsection{Relazioni tra Entità:} One-to-One, One-to-Many, Many-to-Many.
-
-\subsection{Versionamento del Database: Migrations:} Concetto di evoluzione controllata dello schema senza intervento manuale su SQL.
+\input{Background_parts/Database}
