@@ -1,8 +1,18 @@
 \section{Sviluppo Lato Server e Linguaggio PHP}
-Questa sezione giustifica la scelta tecnologica di base.
 
-\subsection{Linguaggi di Scripting Server-Side:} Differenza tra elaborazione client e server.
+
+\subsection{Architettura Client-Server e Scripting Server-Side} 
+Il modello di architettura client-server è una dei due principali paradigmi architetturali del web. In questo modello l'infrastruttura è suddivisa tra due processi comunicanti: un host "always-on" (il server), che possiede un indirizzo IP fisso e noto, e i dispositivi degli utenti (i client), che inviano richieste al sistema centrale. Nel contesto dello sviluppo web, questa separazione si traduce nella distinzione tra "frontend" (il lato client) e "backend" (il lato server).\autocite[ch. 2.1]{kuroseComputerNetworkingTopdown2021}
+\\
+\subsubsection{Il ruolo del Server come Garante} 
+Lo scopo del server è gestire richieste provenienti da moltitudini di host client. I client per contro non comunicano mai direttamente tra di loro nell’architettura Client-Server.\\
+I client sono costituiti dai browser (user-agents) in esecuzione sui dispositivi degli utenti. Le applicazioni client-side elaborano l'interfaccia utente utilizzando tecnologie come HTML, CSS e JavaScript. Il web presenta un limite strutturale, il browser dell’utente per la natura stessa del web, è un ambiente insicuro. Chiunque abbia un minimo di competenza può aprire gli strumenti di sviluppo, disponibili su ogni browser e leggere e modificare il codice. \autocite[ch. 2]{niederstrobbinsLearningWebDesign2025}\\
+Il server, quindi, deve agire come garante dell’integrità e della logica del sistema tramite lo scripting server-side. Lo sviluppo backend si concentra interamente sui software e sui database in esecuzione sul server. Esso deve gestire ogni singola operazione, validazione di input, interagire con il database e gestire la memorizzazione dei file.\autocite[ch. 1]{niederstrobbinsLearningWebDesign2025} \\
+Poiché il client è un ambiente esposto alle azioni dell’utente, l'unico modo per assicurare la validità dei dati è demandare al server ogni operazione di verifica. 
+Ogni transazione, sia essa la visualizzazione di un documento riservato o il caricamento di un nuovo file, viene validata dalla logica di business residente sul server. Se l'utente non possiede i privilegi necessari o se i dati inviati non superano i rigorosi controlli imposti dalle procedure backend, la transazione viene bloccata alla radice. In questo ecosistema, il client funge esclusivamente da mezzo di visualizzazione e di raccolta degli input, mentre il sistema centrale detiene l'autorità assoluta e irrevocabile sulle operazioni e sui registri di audit.\\
+\subsubsection{Protocollo di Comunicazione HTTP}
+
+
 
 \subsection{Il linguaggio PHP:} Storia, diffusione nel web moderno e caratteristiche della versione utilizzata nel progetto.
 
-\subsection{Gestione delle Dipendenze con Composer:} Fondamentale per spiegare come Laravel integra librerie esterne.
