@@ -25,7 +25,7 @@ sorting=none
 ]{biblatex}
 \usepackage{layout}		% http://tex.stackexchange.com/questions/50258/margins-of-book-class
 \input{fixpseudocode}	% for pseudocodes
-
+\usepackage{booktabs}
 %%% Formattazione del header del Capitolo
 \titleformat
 {\chapter} % command
@@ -164,9 +164,13 @@ sorting=none
 	
 	
 	\include{Introduction}
+	\newpage
 	\include{Background}
+	\newpage
 	\include{Project}
+	\newpage
 	\include{Implementation}
+	\newpage
 	\include{Afterword}
 	
 	\appendix
