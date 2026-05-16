@@ -1,16 +1,15 @@
 \section{Sviluppo Lato Server e Linguaggio PHP}
 
 
-\subsection{Architettura Client-Server e Scripting Server-Side} 
+\subsection{Il Modello Architetturale Client-Server}
 Il modello di architettura client-server è una dei due principali paradigmi architetturali del web. In questo modello l'infrastruttura è suddivisa tra due processi comunicanti: un host "always-on" (il server), che possiede un indirizzo IP fisso e noto, e i dispositivi degli utenti (i client), che inviano richieste al sistema centrale. Nel contesto dello sviluppo web, questa separazione si traduce nella distinzione tra "frontend" (il lato client) e "backend" (il lato server).\autocite[ch. 2.1]{kuroseComputerNetworkingTopdown2021}
 \\
-\subsubsection{Il ruolo del Server come Garante} 
 Lo scopo del server è gestire richieste provenienti da moltitudini di host client. I client per contro non comunicano mai direttamente tra di loro nell’architettura Client-Server.\\
 I client sono costituiti dai browser (user-agents) in esecuzione sui dispositivi degli utenti. Le applicazioni client-side elaborano l'interfaccia utente utilizzando tecnologie come HTML, CSS e JavaScript. Il web presenta un limite strutturale, il browser dell’utente per la natura stessa del web, è un ambiente insicuro. Chiunque abbia un minimo di competenza può aprire gli strumenti di sviluppo, disponibili su ogni browser e leggere e modificare il codice. \autocite[ch. 2]{niederstrobbinsLearningWebDesign2025}\\
 Il server, quindi, deve agire come garante dell’integrità e della logica del sistema tramite lo scripting server-side. Lo sviluppo backend si concentra interamente sui software e sui database in esecuzione sul server. Esso deve gestire ogni singola operazione, validazione di input, interagire con il database e gestire la memorizzazione dei file.\autocite[ch. 1]{niederstrobbinsLearningWebDesign2025} \\
 Poiché il client è un ambiente esposto alle azioni dell’utente, l'unico modo per assicurare la validità dei dati è demandare al server ogni operazione di verifica. 
 Ogni transazione, sia essa la visualizzazione di un documento riservato o il caricamento di un nuovo file, viene validata dalla logica di business residente sul server. Se l'utente non possiede i privilegi necessari o se i dati inviati non superano i rigorosi controlli imposti dalle procedure backend, la transazione viene bloccata alla radice. In questo ecosistema, il client funge esclusivamente da mezzo di visualizzazione e di raccolta degli input, mentre il sistema centrale detiene l'autorità assoluta e irrevocabile sulle operazioni e sui registri di audit.\\
-\subsubsection{Protocollo di Comunicazione HTTP}
+\subsection{Il Protocollo di Comunicazione HTTP}
 L’Hypertext Transfer Protocol (HTTP) è il protocollo fondamentale del web usato per la trasmissione di informazioni su internet.
 È composto da due programmi, quello per il server e quello per il client. I due programmi su terminali diversi comunicano scambiandosi messaggi HTTP. Il protocollo HTTP definisce la struttura di questi messaggi e le modalità con cui il client e il server li scambiano.\\
 Il ciclo vitale di questa comunicazione è basato su un rigido modello Request-Response. Il processo ha inizio quando il browser dell'utente necessita di un'informazione o deve inviare dei dati. il client invia un messaggio di richiesta HTTP (HTTP request) al server. Questo messaggio contiene campi di intestazione (header) e un metodo (come GET per richiedere dati, POST per inviare, DELETE per cancellare, etc.).\\
@@ -21,7 +20,7 @@ HTTP è anche affidabile, utilizza TCP come protocollo di trasporto sottostante.
 
 
 
-\subsection{Il linguaggio PHP:} 
+\subsection{Evoluzione e Paradigmi del Linguaggio PHP}
 \begin{table}[t]
 	\centering
 	\begin{tabular}{llr}
@@ -41,11 +40,44 @@ HTTP è anche affidabile, utilizza TCP come protocollo di trasporto sottostante.
 		\bottomrule
 	
 	\end{tabular}
-	\label{tab:w3techs_languages}
 	\caption{Utilizzo dei linguaggi di programmazione lato server \autocite{UsageStatisticsMarket}.}
-
-
+	\label{tab:w3techs_languages}
 \end{table}
-\subsubsection{Evoluzione e Modernizzazione}
+Il linguaggio PHP, acronimo ricorsivo per \textit{Hypertext Preprocessor} è uno dei linguaggi di \textit{scripting} \textit{server-side} di riferimento per lo sviluppo \textit{web}. 
+Come mostrato nella Tabella \ref{tab:w3techs_languages}, PHP è la tecnologia sottostante al 71,4\% dei sistemi \textit{web}, che dispongono di un \textit{back-end}. A titolo di confronto, il suo concorrente più vicino (Ruby) detiene solo il 6,7\% del mercato. Questa diffusione capillare si traduce in un ecosistema maturo e ampiamente supportato, esistono moltissime librerie testate (tramite strumenti come \textit{Composer}), documentazioni, libri, \textit{tutorial}, \textit{framework} basati su questo linguaggio e alla garanzia di un supporto continuo a lungo termine. 
 
-\subsubsection{Efficienza nella Gestione Risorse}
+La scelta di PHP come linguaggio \textit{back-end} garantisce l’utilizzo di una tecnologia ampiamente collaudata su scala globale e supportata da un’infrastruttura \textit{server} massiva. Il linguaggio inoltre offre un’integrazione nativa con principali sistemi di gestione di database relazionali (RDBMS).
+
+L’attuale livello di maturità architetturale è il risultato di una profonda e stratificata evoluzione tecnica. PHP nasce e si sviluppa con il preciso e unico intento di essere un linguaggio per lo \textit{scripting} lato \textit{server}. 
+Viene concepito originariamente nel 1994 da Rasmus Lerdorf como un semplice insieme di file binari CGI (\textit{Common Gateway Interface}) scritti in linguaggio C e denominati \textit{Personal Home Page Tools}. 
+Il primo punto di svolta avvenne con il rilascio della versione PHP 3.0 nel 1998, derivata da una riscrittura completa del \textit{parser} interno ad opera di Andi Gutmans e Zeev Suraski, dove per la prima volta introdussero il supporto, ancora embrionale, alla programmazione orientata agli oggetti (OOP) e permise l’integrazione di numerosi database in modo nativo. 
+Lo sviluppo delle prestazioni e della modularità è proseguito con l'introduzione dello \textit{Zend Engine} in PHP 4.0, ottimizzando drasticamente le prestazioni del codice e la modularità per applicazioni \textit{enterprise}, e si è consolidato con PHP 5, che ha offerto un modello a oggetti completamente rinnovato e molto più robusto. Le iterazioni più recenti, segnatamente PHP 7 e PHP 8, hanno ulteriormente consolidato il paradigma OOP introducendo l'uso di tipizzazioni strette (\textit{union types}, \textit{named arguments}), la compilazione \textit{Just-In-Time} (JIT) e una gestione delle risorse di memoria nettamente ottimizzata.\autocite{PHPHistoryPHP}
+
+Un fattore chiave in questa maturazione è l'evoluzione verso il \textit{Gradual Typing}. Storicamente nato come linguaggio a tipizzazione debole e dinamica, PHP ha implementato un sistema di controllo dei tipi progressivo e rigido. L’introduzione degli \textit{Union} e \textit{Intersection Types}, combinata con la direttiva di tipizzazione rigida, permette una precisa definizione dei contratti del codice. Ciò agevola gli strumenti di analisi statica nel rilevare anomalie e incongruenze già in fase di sviluppo.\autocite{PHPPrefaceManual}
+
+Il linguaggio di programmazione PHP si è strutturato come un ecosistema multiparadigma. I paradigmi principali supportati e comunemente utilizzati nello sviluppo moderno sono tre:\autocite{PHPPrefaceManual}
+\begin{itemize}
+	\item \textbf{Paradigma Orientato agli Oggetti (OOP):} Rappresenta il paradigma dominante utilizzato dai \textit{framework} moderni come Laravel. Il linguaggio supporta l'incapsulamento rigoroso tramite modificatori di visibilità, l'ereditarietà singola, le interfacce, le classi astratte e il polimorfismo.
+	\item \textbf{Paradigma Procedurale:} Costituisce la base storica del linguaggio e l'architettura nativa di molte delle sue funzioni principali. Si basa su una struttura lineare di funzioni e costrutti di controllo imperativi, questo modello è particolarmente indicato per l'implementazione di \textit{script} d'automazione e componenti \textit{software} a bassa complessità.
+	\item \textbf{Supporto al Paradigma Funzionale:} Sebbene non sia un linguaggio funzionale nativo, PHP implementa funzioni di prima classe, funzioni anonime (\textit{Closure}) e funzioni freccia (\textit{Arrow Functions}). Inoltre, sono stati implementati costrutti nativi di ordine superiore come \texttt{array\_map()} e \texttt{array\_filter()}, che consentono l'elaborazione dei dati secondo logiche dichiarative e non imperative.
+\end{itemize}
+
+
+\subsection{Gestione delle Dipendenze tramite Composer}
+Composer \autocite{Composer} è uno strumento di gestione delle dipendenze in \textit{PHP}. A differenza dei tradizionali gestori di pacchetti, come \textit{Yum} o \textit{Apt}, \textit{composer}
+gestisce i pacchetti/librerie su base per progetto e le installa in una \textit{directory} locale (solitamente denominata \textit{vendor}). Tale architettura, concettualmente ispirata a strumenti quali \textit{npm} o \textit{bundler}, permette di dichiarare, gestire e
+installare le librerie software esterne (pacchetti) richieste da un progetto,
+risolvendo automaticamente le relazioni di interdipendenza tra di esse.\\
+
+\textit{Composer} è formato da tre elementi fondamentali:\\
+\begin{itemize}
+	\item \textbf{composer.json}: \textit{File} di configurazione in formato \textit{json} al nucleo del progetto. Contiene i metadati dell’applicazione e l’elenco delle dipendenze dirette per lo sviluppo (\textit{require-dev}) e per la produzione (\textit{require}).
+	\item \textbf{composer.lock}: \textit{File} generato automaticamente dopo la prima installazione o l’aggiornamento dei pacchetti. Registra le versioni esatte di ciascun pacchetto, così da poter garantire \textit{build} riproducibili e deterministiche.
+	\item \textbf{Packagist}: Il \textit{repository} pubblico principale e predefinito di \textit{Composer}. Aggrega i pacchetti \textit{open source} \textit{PHP} disponibili globalmente e viene interrogato da \textit{Composer} per localizzare i pacchetti da scaricare.
+\end{itemize}
+
+L’algoritmo di risoluzione individua le dipendenze corrette interrogando \textit{Packagist} per raccogliere i metadati dei pacchetti richiesti. Successivamente, analizza i \textit{tag} e i rami dei sistemi di controllo di versione (VCS) per valutare i vincoli di versione e calcolare la combinazione di librerie compatibile con le richieste del software. Infine, il processo termina definendo le versioni esatte di ciascun pacchetto che verranno poi cristallizzate all'interno del \textit{file} \texttt{composer.lock}.\\
+
+\textit{Composer} dispone inoltre di un \textit{autoloader}, che è un meccanismo che automatizza il caricamento dei \textit{file} \textit{PHP} all’interno del progetto, eliminando la necessità di inserire manualmente istruzioni come \textit{require} o \textit{include} in ogni \textit{script}. Adottando standard rigorosi di interoperabilità come PSR-4, il sistema di \textit{autoloading} mappa in modo trasparente i \textit{namespace} (spazi dei nomi) logici delle classi sui percorsi fisici del \textit{filesystem}.\\
+
+L’inclusione dell’\textit{Autoloader} all’interno del progetto consente il caricamento e l'utilizzo dinamico delle classi a \textit{runtime}, nel momento esatto in cui vengono istanziate. Questo processo si chiama \textit{Lazy loading}, quindi quando il programma cerca di istanziare o utilizzare una classe non caricata in memoria, l’\textit{Autoloader} intercetta la richiesta, controlla la mappa precedentemente generata e include dinamicamente il \textit{file} richiesto.\\

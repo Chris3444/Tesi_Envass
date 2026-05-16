@@ -1,20 +1,24 @@
 \section{Architettura del Framework Laravel}
 Il nucleo centrale del background. Qui si approfondisce la teoria del framework.
 
-\subsection{Gestione delle Dipendenze con Composer:} Fondamentale per spiegare come Laravel integra librerie esterne.
+\subsection{Il Pattern Architetturale MVC (Model-View-Controller)}
 
-\subsection{Il Pattern Architetturale MVC (Model-View-Controller):}
+\subsubsection{Model} 
+Rappresentazione dei dati e logica di business.
 
-\subsubsection{Model:} Rappresentazione dei dati e logica di business.
+\subsubsection{View} 
+Il sistema di templating (Blade) e la presentazione.
 
-\paragraph{View:} Il sistema di templating (Blade) e la presentazione.
+\subsubsection{Controller} 
+Intermediazione e gestione del flusso applicativo.
 
-\subsubsection{Controller:} Intermediazione e gestione del flusso applicativo.
+\subsection{Il Ciclo di Vita della Richiesta (Request Lifecycle)}
 
-\subsection{Il Ciclo di Vita della Richiesta (Request Lifecycle):}
+\subsubsection{Routing} 
+Definizione degli endpoint e smistamento del traffico.
 
-\subsubsection{Routing:} Definizione degli endpoint e smistamento del traffico.
+\subsubsection{Middleware} 
+Spiegazione dei filtri di sicurezza e autenticazione.
 
-\subsubsection{Middleware:} Spiegazione dei filtri di sicurezza e autenticazione.
-
-\subsection{Service Layer e Dependency Injection:} Approfondimento su come disaccoppiare la logica dai controller (essenziale per una tesi di alto livello).
+\subsection{Service Layer e Dependency Injection} 
+Approfondimento su come disaccoppiare la logica dai controller (essenziale per una tesi di alto livello).
