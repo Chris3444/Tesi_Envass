@@ -2,7 +2,7 @@
 L'evoluzione del Web client-side si fonda sulla sinergia di tre tecnologie principali: HTML per la struttura, CSS per la presentazione e JavaScript per il comportamento. 
 
 \subsection{Il linguaggio di marcatura HTML}
-Il \textit{Hypertext Markup Language} (HTML) è il componente fondamentale del Web; definisce il linguaggio e la struttura dei contenuti disponibili in rete. Lo scopo dell'HTML è quello di strutturare e definire semanticamente le informazioni. La sua evoluzione è contraddistinta da differenti fasi che corrispondono a versioni discrete dello stesso (come l'HTML4 o l'XHTML), ma ad oggi le specifiche sono gestite come uno ``Living Standard'' mantenuto dal gruppo WHATWG (\textit{Web Hypertext Application Technology Working Group}). La particolarità di questo modello prevede un aggiornamento continuo delle specifiche senza l'utilizzo di rilasci numerati \cite{HTMLStandard}.
+Il \textit{Hypertext Markup Language} (HTML) è il componente fondamentale del Web; definisce il linguaggio e la struttura dei contenuti disponibili in rete. Lo scopo dell'HTML è quello di strutturare e definire semanticamente le informazioni. La sua evoluzione è contraddistinta da differenti fasi che corrispondono a versioni discrete dello stesso (come l'HTML4 o l'XHTML), ma ad oggi le specifiche sono gestite come uno ``Living Standard'' mantenuto dal gruppo WHATWG (\textit{Web Hypertext Application Technology Working Group}). La particolarità di questo modello prevede un aggiornamento continuo delle specifiche senza l'utilizzo di rilasci numerati~\cite{HTMLStandard}.
 
 Alla base del linguaggio c’è il concetto di \textit{Hypertext} (ipertesto), che definisce una struttura di collegamenti (\textit{link}) permettendo la navigazione tra diverse pagine web o all'interno dello stesso documento. L'architettura del \textit{World Wide Web} (WWW) si fonda proprio sulla pubblicazione di contenuti e sulla loro interconnessione tramite questi nodi essenziali della rete.
 
@@ -12,7 +12,7 @@ Quando un browser riceve un documento HTML, ne genera una rappresentazione inter
 
 Gli elementi appena descritti permettono all'HTML di definire lo scheletro informativo della pagina, delegando però gli aspetti visivi e comportamentali ad altri linguaggi specializzati \autocite[cap.~5]{niederstrobbinsLearningWebDesign2025}.
 
-\newpage
+
 
 \subsection{La formattazione tramite CSS} 
 \begin{figure}[t]
@@ -72,7 +72,7 @@ I programmi \textit{JavaScript} necessitano di un ``ambiente \textit{host}'' (\t
 \subsection*{Modelli di Comunicazione Asincrona}
 La comunicazione asincrona, storicamente definita con l'acronimo AJAX (\textit{Asynchronous JavaScript and XML}), veniva gestita inizialmente tramite \textit{callback}. Oggigiorno per il fenomeno del ``\textit{callback hell}'' (ovvero l'eccessivo annidamento delle funzioni di ritorno), sono state introdotte le \textit{Promise}, oggetti che rappresentano il risultato futuro e non ancora disponibile di un'operazione. Esse permettono di concatenare in modo lineare le richieste tramite \textit{fetch} e consentono poi di gestire gli errori in modo centralizzato tramite \texttt{catch()}, indirizzando i successi attraverso \texttt{then}.  
 
-Per gestire le \textit{Promise} sono stati introdotti le parole chiave \texttt{async} e \texttt{await}, che permettono di scrivere il codice asincrono, come quello sincrono, sfruttando il medesimo modello non bloccante basato sull'\textit{Event Loop}. \cite{\autocite[ch. 13]{flanaganJavaScriptDefinitiveGuide2020}}
+Per gestire le \textit{Promise} sono stati introdotti le parole chiave \texttt{async} e \texttt{await}, che permettono di scrivere il codice asincrono, come quello sincrono, sfruttando il medesimo modello non bloccante basato sull'\textit{Event Loop}. \autocite[ch. 13]{flanaganJavaScriptDefinitiveGuide2020}
 
 \subsection*{La Libreria jQuery}
 \textit{jQuery}\autocite{openjsf.orgJQueryAPIDocumentation} è una libreria \textit{JavaScript} compatta progettata per ottimizzare la manipolazione del DOM, standardizzare la gestione degli eventi e semplificare l'esecuzione delle richieste asincrone (AJAX).
