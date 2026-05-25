@@ -1,13 +1,55 @@
 \section{Architettura del Framework Laravel}
-Il nucleo centrale del background. Qui si approfondisce la teoria del framework.
+\textit{Laravel} è un \textit{framework} \textit{full-stack} \textit{open source} scritto in PHP. \textit{Laravel} è al momento, secondo le indagini di mercato condotte annualmente da \textit{JetBrains} (all'interno del \textit{report} \textit{State of Developer Ecosystem}), il \textit{leader} assoluto fra i \textit{framework} PHP, scelto da oltre il 64\% degli sviluppatori PHP.~\autocite{StatePHP2025} 
+
+Il suo obiettivo primario è garantire una ``\textit{developer experience}'' eccellente, mettendo a disposizione strumenti potenti e raffinati per gestire la complessità delle applicazioni moderne.
+
+Inoltre, \textit{Laravel} si definisce un \textit{framework} progressivo, scalabile e \textit{community driven}. Progressivo, dato che è stato ideato per crescere insieme allo sviluppatore \textit{web} ed alle esigenze del progetto, risultando accessibile sia per sviluppatori \textit{junior}, offrendo però strumenti robusti per lo sviluppo di applicazioni di livello \textit{enterprise}. Scalabile, invece grazie alle caratteristiche di PHP e al supporto integrato per sistemi di \textit{cache} distribuita e veloce come \textit{Redis}, che facilitano lo \textit{scaling} orizzontale ed infine \textit{community driven}, dato che si basa sul contributo di migliaia di sviluppatori in tutto il mondo.~\autocite{InstallationLaravel13x} 
+
+L'architettura del \textit{framework} è progettata per garantire una rigorosa separazione delle responsabilità (\textit{Separation of Concerns}). Questo obiettivo viene conseguito tramite quattro pilastri metodologici: la gestione del \textit{routing} per l’instradamento delle richieste HTTP, l’adozione del \textit{pattern} MVC per la strutturazione del codice, la gestione delle dipendenze tramite il meccanismo di \textit{Dependency Injection}, e infine, l’astrazione dello strato di persistenza dei dati.
 
 \subsection{Il Pattern Architetturale MVC (Model-View-Controller)}
 
-\paragraph{Model}
+Il \textit{framework} \textit{Laravel} adotta nativamente il \textit{pattern} architetturale \textit{Model-View-Controller} (MVC) per separare in modo netto la logica di presentazione dalla logica di \textit{business} e di persistenza dei dati.
 
-\paragraph{View}
+\subsubsection*{View}
+\autocite{Controllers}
+La vista~\autocite{ViewsLaravel13x} è completamente isolata dalla logica di \textit{business} e non possiede logica decisionale. Non sa da dove provengono i dati, né se siano stati elaborati. Il suo unico compito è quello di esporre le informazioni inoltrate.
+\autocite{Views,Views}
+La \textit{View} viene gestita tramite il motore di \textit{template} \textit{Blade} che, a partire da file con estensione \texttt{.blade.php}, genera dinamicamente il codice HTML. Questi file vengono salvati tipicamente nella \textit{directory} \texttt{resources/views}. \textit{Blade} è un motore \textit{template} molto leggero, accetta codice PHP puro all’interno delle viste e compila le viste in codice PHP che viene memorizzato nella \textit{cache} finché non viene modificato, il che significa che \textit{Blade} non aggiunge praticamente alcun sovraccarico (\textit{overhead}) all’applicazione.
 
-\paragraph{Controller}
+Le viste sono organizzate in modo gerarchico: è possibile definire scheletri strutturali globali (\textit{layout}) che descrivono parti fisse dell’interfaccia, come \textit{header} o \textit{footer}, che possono venir riutilizzati in ogni pagina. Allo smelly modo si possono creare componenti più piccoli, come bottoni specifici, che possono essere incapsulati e riutilizzati ovunque.
+
+La sintassi standard di \textit{Blade} (\texttt{\{\{ \$variabile \}\}}) sanifica automaticamente l'output tramite la funzione \texttt{htmlspecialchars()}, bloccando all’origine attacchi \textit{Cross-Site-Scripting} (XSS) nel corpo della pagina HTML. 
+
+\subsubsection*{Model}
+Il Modello~ è incaricato di definire la struttura dei dati e di governare l’interazione concettuale con il database. Esso funziona tramite un’astrazione orientata agli oggetti, in cui ogni entità del sistema corrisponde ad una classe, che incapsula le proprietà del dato e le relative regole di \textit{business}. Vengono anche definite le relazioni con altri oggetti (per esempio, una struttura può contenere più stanze). 
+
+Il Modello, quindi, fornisce un’interfaccia ad alto livello per interrogare, modificare, o ricevere informazioni dal database attraverso metodi e oggetti \textit{software}, senza dover scrivere manualmente istruzioni nel linguaggio nativo del database.  
+
+Il modello inoltre garantisce la coerenza logica del dato applicando le regole stabilite. Gestisce la formattazione automatica dei dati (es. \textit{cast} da stringa a data), la protezione dei campi sensibili e la definizione di attributi calcolati. 
+
+\subsubsection*{Controller}
+\autocite{aranzullaComeFareTilde}
+Il Controllore~\autocite{ControllersLaravel13x} è il coordinatore fra i vari strati. Invece di definire tutta la logica di gestione all'interno dei file di instradamento (\textit{routing}), \textit{Laravel} incoraggia fortemente a raggruppare i comportamenti correlati all'interno di classi Controllore dedicate. Esso ha il compito di raggruppare e organizzare la logica necessaria per gestire le richieste HTTP in ingresso. Riceve la richiesta, la analizza e poi stabilisce quale risposta restituire; in un’architettura \textit{full-stack} il Controllore restituirà tipicamente un'istanza di una Vista \textit{Blade}, dopo aver interrogato uno o più modelli per ottenere le relative informazioni. 
+
+I Controllori sono di solito basati su un’architettura delle risorse (RESTful), dove esistono metodi standard per un insieme standard di azioni (como visualizzare un singolo elemento, mostrare un elenco, eliminare un elemento, modificarlo, \textit{etc.}). Questo ha lo scopo di standardizzare i controllori, così da rendere la logica interna pulita e prevedibile.
+
+\subsubsection*{In sintesi il ciclo MVC}
+Il ciclo \textit{Model-View-Controller} si articola nelle seguenti fasi consecutive:
+\begin{enumerate}
+	\item Il controllore riceve la richiesta dall’utente e determina l’azione da eseguire.
+	\item Il Controllore interroga uno o più Modelli per ottenere o modificare le informazioni necessarie.
+	\item Il Modello esegue la logica d'affari e la persistenza dei dati, restituendo i risultati al Controllore. 
+	\item Infine, il Controllore assembla queste informazioni e le passa ad una Vista, che genera il risultato finale da presentare all’utente.
+\end{enumerate}
+
+In sintesi il ciclo MVC è il seguente: 
+\begin{enumerate}
+	\item Il controllore riceve la richiesta dall’utente e determina l’azione da eseguire.
+	\item Il Controllore interroga uno o più Modelli per ottenere o modificare le informazioni necessarie.
+	\item Il Modello esegue la logica d'affari e la persistenza dei dati, restituendo i risultati al Controllore. 
+	\item Infine, il Controllore assembla queste informazioni e le passa ad una Vista, che genera il risultato finale da presentare all’utente.
+\end{enumerate}
 
 \subsection{Il Ciclo di Vita della Richiesta (Request Lifecycle)}
 
