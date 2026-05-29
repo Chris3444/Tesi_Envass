@@ -7,7 +7,7 @@ Inoltre, \textit{Laravel} si definisce un \textit{framework} progressivo, scalab
 
 L'architettura del \textit{framework} è progettata per garantire una rigorosa separazione delle responsabilità (\textit{Separation of Concerns}). Questo obiettivo viene conseguito tramite quattro pilastri metodologici: la gestione del \textit{routing} per l’instradamento delle richieste HTTP, l’adozione del \textit{pattern} MVC per la strutturazione del codice, la gestione delle dipendenze tramite il meccanismo di \textit{Dependency Injection}, e infine, l’astrazione dello strato di persistenza dei dati.
 
-\subsection{Il Pattern Architetturale MVC (Model-View-Controller)}
+\subsection{Il Pattern Architetturale MVC }
 
 Il \textit{framework} \textit{Laravel} adotta nativamente il \textit{pattern} architetturale \textit{Model-View-Controller} (MVC) per separare in modo netto la logica di presentazione dalla logica di \textit{business} e di persistenza dei dati.
 
@@ -51,13 +51,41 @@ In sintesi il ciclo MVC è il seguente:
 	\item Infine, il Controllore assembla queste informazioni e le passa ad una Vista, che genera il risultato finale da presentare all’utente.
 \end{enumerate}
 
-\subsection{Il Ciclo di Vita della Richiesta (Request Lifecycle)}
+\subsection{Il Ciclo di Vita della Richiesta}
+Il ciclo di vita della richiesta (\textit{Request Lifecycle}) è il processo architetturale e temporale mediante il quale il \textit{framework} \textit{Laravel} intercetta una richiesta HTTP inviata da un \textit{client}, inizializza l’ambiente di esecuzione, effettua i controlli di sicurezza e indirizza la richiesta verso la logica applicativa corretta, gestendo infine la restituzione della risposta. 
 
-\subsubsection{Routing} 
-Definizione degli endpoint e smistamento del traffico.
+\subsubsection*{Fase di Inizializzazione (Bootstrap)}
+Il ciclo di vita della richiesta ha inizio nel momento in cui il \textit{server web} riceve una richiesta HTTP indirizzata all’applicazione, che convoglia tutte le richieste verso il file \texttt{public/index.php}. Questo file è il punto di partenza per caricare il resto del \textit{framework}. Ha il compito di caricare la definizione dell’\textit{autoloader} generata dal gestore di dipendenze \textit{Composer} per poi istanziare la prima istanza dell’applicazione e del \textit{Service Container} tramite \texttt{bootstrap/app.php}.
 
-\subsubsection{Middleware} 
-Spiegazione dei filtri di sicurezza e autenticazione.
+Infine, l’applicazione assegna la gestione delle richieste al \textit{Kernel} HTTP. Il \textit{Kernel} esegue sempre una serie di \textit{bootstrapper} prima che la richiesta venga effettivamente gestita, i quali configurano la gestione degli errori, il \textit{logging}, rilevano l'ambiente dell'applicazione e svolgono altre attività interne.
 
-\subsection{Service Layer e Dependency Injection} 
-Approfondimento su come disaccoppiare la logica dai controller 
+In questa fase vengono anche caricati i \textit{Service Providers}; questi sono responsabili dell’inizializzazione (\textit{bootstrapping}) di tutti i vari componenti del \textit{framework}, come il database, le code, la validazione e il \textit{routing}. \textit{Laravel} itera attraverso l'elenco dei \textit{provider}, li istanzia, chiama il loro metodo \texttt{register} e successivamente, una volta tutti registrati, invoca il metodo \texttt{boot}. 
+
+\subsubsection*{Filtrazione tramite Middleware}
+Il \textit{Kernel} HTTP è anche responsabile del passaggio della richiesta attraverso lo \textit{stack} di \textit{middleware} dell’applicazione. Ogni \textit{middleware} è una classe indipendente dotata di un metodo standard \texttt{handle(\$request, Closure \$next)} e costituisce un meccanismo per ispezionare, filtrare ed eventualmente respingere le richieste HTTP in entrata ed uscita. Il passaggio della richiesta allo strato successivo è unicamente possibile invocando \texttt{\$next(\$request)}.
+
+I \textit{middleware} sono divisi in due categorie:
+
+	 I \textit{middleware} globali, che rappresentano lo strato più esterno della \textit{pipeline} e vengono eseguiti su ogni richiesta HTTP in ingresso; il loro compito è validare lo stato globale dell’infrastruttura.
+	I \textit{middleware} di rotta, che sono filtri eseguiti solo dopo che il \textit{framework} ha analizzato l'URI della richiesta e ha determinato la rotta di destinazione. A questa categoria appartengono \textit{middleware} come \textit{Authenticate}, che verifica che l’utente sia autorizzato, o \textit{VerifyCsrfToken}, che implementa la difesa contro attacchi \textit{Cross-Site Request Forgery} (CSRF).
+
+
+\subsubsection*{L'Instradamento tramite Routing}
+Dopo che la richiesta supera i \textit{middleware} globali, viene consegnata al \textit{router} per l’instradamento. Il \textit{router} di \textit{Laravel} agisce come un mappatore deterministico: analizza i metadati della richiesta in entrata, isolando specificamente l'URI (la stringa dell'indirizzo, come \texttt{/profilo}) e il metodo HTTP associato (\texttt{GET}, \texttt{POST}, \texttt{PUT}, \texttt{DELETE}).
+
+Il \textit{router} confronta questa richiesta con l’elenco delle rotte definite all’interno della cartella \texttt{/routes}. Queste rotte accettano un URI preciso insieme ad un controllore o una \textit{closure}. 
+
+Il \textit{router} esamina l'URI in ingresso e lo fa corrispondere a una rotta definita, eseguendo contestualmente eventuali \textit{middleware} specifici assegnati a quella rotta o a quel gruppo di rotte. Se la richiesta supera con successo tutti i \textit{middleware} assegnati, il \textit{router} effettua l'\_handover\_, che individua la classe controllore e invoca il metodo associato oppure esegue la \textit{closure} della rotta.
+
+L'esecuzione della rotta o del \textit{controller} genera infine una risposta HTTP. Questa risposta compie un viaggio a ritroso passando nuovamente attraverso la catena di \textit{middleware} della rotta, dando all'applicazione la possibilità di modificare o esaminare la risposta in uscita. Infine, il metodo \texttt{handle} del \textit{Kernel} HTTP restituisce l'oggetto risposta, e il contenuto viene inviato al \textit{browser} dell'utente, concludendo così il ciclo di vita della richiesta.
+
+\subsection{Service Container}
+Il \textit{Service Container} si occupa di gestire le dipendenze delle classi e di eseguire le iniezioni delle dipendenze (\textit{Dependency Injection}, DI).
+
+La DI implementa in modo operativo il paradigma dell'Inversione del Controllo (\textit{Inversion of Control}, IoC), che consiste nel delegare la gestione delle dipendenze a un componente esterno, come il \textit{framework}, invece che alle singole classi. In questo modo la DI rappresenta la concretizzazione di questo principio: le dipendenze non vengono più create internamente dal componente che le richiede, ma vengono ``iniettate'' dall'esterno al momento della sua attivazione.
+
+Il \textit{Service Container} di \textit{Laravel} automatizza la \textit{Dependency Injection} tramite l’\textit{auto-wiring} (Risoluzione Automatica). Sfruttando la \textit{Reflection} API di PHP, il \textit{container} analizza il costruttore della classe per identificare il \textit{type-hinting}, ovvero le dichiarazioni esplicite di classi o interfacce sui parametri del metodo. Una volta determinato il tipo richiesto, il \textit{container} risolve ricorsivamente la dipendenza, istanziando e configurando completamente l’istanza della classe principale, eliminando così la necessità di mappature o configurazioni manuali.
+
+Il \textit{pattern} del \textit{Service Layer} è un esempio concreto che illustra l’efficacia della \textit{Dependency Injection} (DI) e del \textit{Service Container} in \textit{Laravel}. L'inclusione della logica di \textit{business} complessa direttamente nei \textit{Controller} porta a un codice rigido, fortemente accoppiato e difficile da testare.
+
+La soluzione consiste nell’estrarre queste operazioni in una classe separata, chiamata Servizio, e ``iniettarla'' nel \textit{Controller} tramite il costruttore. In questo modo, il \textit{Controller} si occupa solo della gestione del traffico HTTP, delegando l’elaborazione dei dati al Servizio.
