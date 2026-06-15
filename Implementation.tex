@@ -1,26 +1,588 @@
 \chapter{Implementazione del progetto}
 
 \section{Tecnologie utilizzate}
-
+L'architettura \textit{software} è stata interamente sviluppata utilizzando il \textit{framework} Laravel (versione 11), un \textit{framework} applicativo \textit{web} basato su PHP (versione 8.2) che adotta il paradigma orientato agli oggetti e supporta le funzionalità moderne del linguaggio, quali i tipi di intersezione, le proprietà in sola lettura e la scomposizione dei costruttori.\\
+L'applicazione si appoggia a un sistema di gestione di \textit{database} relazionale (RDBMS) MySQL (versione 8.0), configurato per garantire l'integrità referenziale e la persistenza dei dati attraverso l'uso del motore di memorizzazione InnoDB, il quale supporta transazioni ACID e vincoli di chiave esterna (\textit{foreign keys}).\\
+La gestione delle dipendenze del \textit{backend} è affidata al gestore di pacchetti Composer, il quale provvede all'\textit{autoloader} delle classi secondo lo standard PSR-4. Parallelamente, l'ecosistema \textit{front-end} è gestito tramite il \textit{package manager} npm. Il processo di compilazione e raggruppamento degli \textit{asset} (\textit{bundling}) è demandato a Vite, integrato nel \textit{framework} tramite il pacchetto ufficiale per Laravel. Per l'interfaccia utente è stato impiegato il \textit{framework} Bootstrap, affiancato dal preprocessore CSS Sass e dal tema AdminBSB \textit{Material Design} per fornire un \textit{design} reattivo. L'infrastruttura \textit{client-side} è ulteriormente supportata dalla libreria Axios per le comunicazioni HTTP asincrone e include i moduli per l'integrazione di componenti Vue.js.\\
+Rispetto alle versioni precedenti, Laravel 11 introduce una struttura del progetto significativamente snellita: i \textit{file} di configurazione generali sono stati accorpati e la registrazione dei \textit{middleware} e delle rotte è stata centralizzata all'interno del \textit{file} \texttt{bootstrap/app.php}, eliminando i tradizionali \textit{file} \textit{Kernel} HTTP e \textit{Console}.
 \section{Routing}
-
+Il \textit{framework} Laravel utilizza un sistema di \textit{routing} che associa le richieste HTTP alle funzioni nei \textit{controller}. Attraverso questo meccanismo, ogni richiesta viene instradata verso il componente responsabile della relativa elaborazione, consentendo una chiara separazione tra gestione delle richieste, logica applicativa e presentazione dei dati.\\
+Nel progetto sviluppato il \textit{routing} svolge inoltre un ruolo centrale nella gestione della sicurezza, poiché costituisce il punto in cui vengono applicati i controlli di autenticazione e autorizzazione. Le rotte sono organizzate in gruppi logici e protette mediante \textit{middleware} dedicati, garantendo che le funzionalità del sistema siano accessibili esclusivamente agli utenti autorizzati.\\
+Nei paragrafi successivi vengono descritti il modello di gestione dei ruoli e dei permessi adottato, i \textit{middleware} utilizzati per il controllo degli accessi e l'organizzazione delle principali rotte applicative.
 \subsection{Utenti, ruoli e permessi}
+La gestione delle autorizzazioni è basata sul modello \textit{Role-Based Access Control} (RBAC), implementato mediante il pacchetto \textit{spatie/laravel-permission}. Tale approccio consente di separare l'identità dell'utente dai privilegi operativi assegnati, migliorando la flessibilità e la manutenibilità del sistema.\\
+L'infrastruttura autorizzativa è composta da due livelli distinti: I ruoli, che definiscono il profilo generale dell'utente all'interno dell'applicazione e i permessi, che determinano le operazioni specifiche che l'utente può eseguire.\\
+I principali ruoli applicativi sono: \textit{admin}, \textit{laboratory\_director}, \textit{laboratory\_manager}, \textit{management}, \textit{technician}, \textit{detector}, \textit{visitor} e \textit{computer\_technician}. Tali ruoli identificano le diverse figure professionali coinvolte nei processi operativi del laboratorio.\\
+Oltre ai ruoli, il sistema prevede un insieme di permessi granulari che consentono di controllare in modo puntuale l'accesso alle singole funzionalità. I permessi implementati sono riportati nella Tabella ~\ref{tab:permessi_sistema}.\\
+\begin{table}[t]
+	\centering
+	\begin{tabular}{ll}
+		\hline
+		\textbf{Permesso} & \textbf{Descrizione} \\ \hline
+		\textit{sampling} & Accesso alle attività di campionamento. \\
+		\textit{analysis} & Gestione dei dati analitici e dei rapporti di prova. \\
+		\textit{rdp\_alidation} & Validazione dei rapporti di prova. \\
+		\textit{Rdp\_reopening} & Riapertura di rapporti precedentemente validati. \\
+		\textit{data\_edit} & Modifica delle anagrafiche e dei dati di configurazione. \\
+		\textit{System\_edit} & Amministrazione avanzata del sistema. \\
+		\textit{rdp\_shipping} & Gestione dell'invio dei rapporti di prova. \\
+		\textit{viewing} & Accesso in sola lettura ai dati assegnati. \\ \hline
+	\end{tabular}
+	\caption{Descrizione dei permessi granulari del sistema.}
+	\label{tab:permessi_sistema}
+\end{table}
+Questa suddivisione consente di applicare il principio del minimo privilegio, assegnando a ciascun operatore esclusivamente le autorizzazioni necessarie allo svolgimento delle proprie attività. La verifica delle autorizzazioni avviene su due livelli differenti. I ruoli vengono controllati principalmente durante la fase di instradamento delle richieste mediante il \textit{middleware} \textit{role}, che limita l'accesso alle diverse aree applicative. I permessi granulari vengono invece verificati all'interno delle viste \textit{Blade} tramite la direttiva @can, che consente di mostrare o nascondere specifiche funzionalità in base alle autorizzazioni assegnate all'utente. Questo approccio permette di combinare un controllo degli accessi a livello di area applicativa con una gestione più fine delle singole operazioni disponibili all'interno dell'interfaccia.\\
+Come mostrato nel Listato \ref{lst:revisione_rdp}, il pulsante di revisione del Rapporto di Prova viene reso disponibile soltanto agli utenti in possesso del permesso\textit{ rdp\_reopening}.
+\begin{lstlisting}[float=t, caption={Esempio della direttiva @can.}, label={lst:revisione_rdp}, basicstyle=\ttfamily, captionpos=b, escapeinside={(*}{*)}]
+	@(*\textit{can}*)('rdp_(*\textit{reopening}*)')
+	<(*\textit{form}*) (*\textit{action}*)="{{ (*\textit{route}*)('admin.(*\textit{testReport}*).(*\textit{revisionTestReport}*)',
+			$((*\textit{testReport}*)->id) }}"
+	method="POST">
+	@csrf
+	<(*\textit{button}*) (*\textit{type}*)="(*\textit{submit}*)">
+	Revisione RDP
+	</(*\textit{button}*)>
+	</(*\textit{form}*)>
+	@(*\textit{endcan}*)
+\end{lstlisting}
 
 \subsection{Middleware del login}
+I \textit{middleware} rappresentano uno dei principali meccanismi di sicurezza del \textit{framework} Laravel e consentono di intercettare le richieste HTTP prima che queste raggiungano i \textit{controller} applicativi. Nel progetto sono stati utilizzati per implementare i controlli di autenticazione, autorizzazione e validità degli account utente.
+
+L'accesso alle funzionalità riservate è subordinato al superamento di una catena di \textit{middleware} eseguiti in sequenza. Ciascun componente è responsabile di una specifica verifica e può interrompere il flusso della richiesta qualora i requisiti di accesso non risultino soddisfatti. In particolare, il sistema utilizza tre \textit{middleware} principali:
+\begin{itemize}
+	\item \textit{auth}: verifica che l'utente abbia effettuato correttamente l'accesso alla piattaforma. Le richieste provenienti da utenti non autenticati vengono reindirizzate alla pagina di \textit{login}.
+	\item \textit{role}: fornito dal pacchetto \textit{spatie/laravel-permission}, controlla che l'utente appartenga a uno dei ruoli autorizzati ad accedere alla specifica area applicativa.
+	\item \textit{status}: \textit{middleware} personalizzato sviluppato nell'ambito del progetto. Ha il compito di verificare che l'account dell'utente sia attivo. Qualora un amministratore disabiliti un account già autenticato, il \textit{middleware} invalida la sessione attiva e impedisce ulteriori accessi alle funzionalità del sistema.
+\end{itemize}
+L'utilizzo combinato di questi controlli consente di implementare una politica di sicurezza multilivello, nella quale autenticazione, ruolo e stato dell'utenza vengono verificati prima dell'esecuzione della logica applicativa.
+
+Per quanto riguarda il \textit{middleware} personalizzato \textit{status} (Listato~\ref{lst:middleware_status}), la logica implementata verifica la presenza di una sessione autenticata e controlla il valore del campo \textit{status} associato all'utente. In caso di account disabilitato, la sessione viene terminata e l'utente viene reindirizzato alla schermata di autenticazione.
+\begin{lstlisting}[float=t, caption={Logica di validazione dello stato utente nel middleware personalizzato.}, captionpos=b, label={lst:middleware_status}, basicstyle=\ttfamily, escapeinside={(*}{*)}]]
+	if (auth()->check() && !auth()->user()->status) {
+		auth()->logout();
+		return redirect('login');
+	}
+	return $next($request);
+\end{lstlisting}
 
 \subsection{Rotte}
+Le rotte dell'applicazione sono definite nel \textit{file} \texttt{routes/web.php} e costituiscono il punto di accesso alle funzionalità implementate nei \textit{controller}. Per migliorare la manutenibilità del codice e centralizzare i controlli di sicurezza, le rotte sono organizzate in gruppi logici corrispondenti alle diverse aree operative del sistema.
 
+La piattaforma è configurata come sistema ad accesso controllato. Le funzionalità di registrazione autonoma degli utenti, recupero della password e verifica dell'indirizzo \textit{email} sono state disabilitate, poiché la gestione delle utenze viene effettuata esclusivamente dagli amministratori dell'applicazione.
+
+L'\textit{endpoint} principale dell'applicazione svolge una funzione di instradamento iniziale. Gli utenti non autenticati vengono reindirizzati alla schermata di \textit{login}, mentre gli utenti autenticati vengono indirizzati verso l'area operativa associata al proprio ruolo.
+
+Le funzionalità amministrative e operative sono raccolte all'interno di gruppi di rotte protette. A tali gruppi vengono applicati un prefisso URL comune (\texttt{/admin}), una convenzione uniforme per la denominazione delle rotte (\texttt{admin.*}) e i \textit{middleware} responsabili dei controlli di autenticazione e autorizzazione.
+
+Il Listato \ref{lst:rotte_admin} mostra una versione semplificata della configurazione utilizzata per il gruppo principale di rotte amministrative:
+\begin{lstlisting}[float=t, caption={Configurazione dei gruppi di rotte amministrative con applicazione di middleware.}, captionpos=b, label={lst:rotte_admin}, basicstyle=\ttfamily, escapeinside={(*)}{(*))}]
+	Route::middleware([
+	'auth',
+	'role:admin|(\textit{laboratory_director})|...',
+	'status'
+	])->prefix('admin')
+	->name('admin.')
+	->group(function () {
+		Route::get('/home', [HomeController::class, 'index'])
+		->name('home');
+		
+		// Ulteriori blocchi di rotte relativi ad altre risorse di sistema
+	});
+\end{lstlisting}
 \section{MVC}
-1 esempio di tipo verbale
+L'applicazione è sviluppata secondo il \textit{pattern} architetturale \textit{Model-View-Controller} (MVC), esteso mediante l'introduzione di un \textit{Service Layer} dedicato alla gestione della logica applicativa. Questa scelta progettuale consente di mantenere separati i diversi livelli dell'applicazione: i \textit{controller} gestiscono le richieste HTTP e le risposte verso il \textit{client}, i modelli rappresentano le entità persistenti del dominio applicativo, mentre i servizi centralizzano le regole di \textit{business} e le operazioni più complesse.
+
+Per mostrare concretamente come i diversi componenti collaborino tra loro, viene analizzato il flusso di eliminazione di un verbale di campionamento. Il caso di studio consente di seguire l'intero ciclo di elaborazione di una richiesta, dalla visualizzazione dell'interfaccia utente fino alla persistenza delle modifiche sul \textit{database}, evidenziando il ruolo svolto da modello, servizio, \textit{controller} e vista.
+
+Il primo elemento coinvolto nell'implementazione è il modello di dominio, responsabile della rappresentazione delle entità persistenti e della loro interazione con il \textit{database}. Nel caso in esame, tale ruolo è svolto dalla classe \textit{Verbal} nel Listato~\ref{lst:modello_verbal}, che rappresenta i verbali di campionamento memorizzati nella tabella SQL \textit{verbals}. La classe utilizza alcuni \textit{trait} forniti dal \textit{framework} e dal progetto applicativo. In particolare, il \textit{trait} \textit{SoftDeletes} implementa la cancellazione logica dei \textit{record} mediante la valorizzazione del campo \textit{deleted\_at}, preservando lo storico delle informazioni senza rimuoverle fisicamente dal \textit{database}; invece, il \textit{trait} personalizzato \textit{EncryptedAttribute} consente la memorizzazione cifrata dei dati sensibili.
+
+La classe definisce esplicitamente gli attributi \texttt{\$fillable} per prevenire vulnerabilità di \textit{Mass Assignment}, che si verificano quando i parametri di una richiesta HTTP vengono mappati automaticamente sugli attributi di un modello senza filtri preventivi, consentendo alterazioni del \textit{payload} tramite l'iniezione di campi non autorizzati. La medesima classe implementa il metodo \texttt{casts()} per la tipizzazione forte dei dati in uscita dal \textit{database} (es. conversione di stringhe SQL in oggetti \textit{DateTime}) e l'albero delle relazioni \textit{Eloquent} uno-a-molti (\textit{HasMany}) e molti-a-uno (\textit{BelongsTo}) che riflettono i vincoli relazionali del \textit{database} MySQL.
+\begin{lstlisting}[float=!ht, caption={Implementazione del modello Verbal con trait, attributi protetti e relazioni.}, captionpos=b, label={lst:modello_verbal}, basicstyle=\ttfamily, escapeinside={(*)}{*)}]
+	class Verbal extends Model
+	{
+		// Trait e interfacce di audit logging omesse in questa sezione
+		use (EncryptedAttribute), (HasFactory), (SoftDeletes);
+		protected $fillable = [
+		'campaign_id',
+		'partition_id',
+		// [...] Ulteriori attributi omessi per brevita'
+		];
+		protected function casts(): array
+		{
+			return [
+			'revision_date' => 'datetime:Y-m-d',
+			'sampling_date' => 'datetime:Y-m-d',
+			// [...]
+			];
+		}
+		public function campaign(): BelongsTo
+		{
+			return $this->belongsTo(Campaign::class);
+		}
+		public function verbalRooms(): HasMany
+		{
+			return $this->hasMany(VerbalRoom::class);
+		}
+	}
+\end{lstlisting}
+La classe \textit{VerbalService} rappresenta il livello intermedio tra \textit{controller} e modello, con il compito di centralizzare la logica applicativa associata alla gestione dei verbali. Questa scelta evita di inserire regole di \textit{business} all'interno dei \textit{controller} e favorisce il riutilizzo delle funzionalità in differenti contesti applicativi.
+
+Come esempio viene analizzato il metodo \textit{deleteVerbal} nel Listato \ref{lst:verbal_service_delete}, responsabile dell'eliminazione logica di un verbale di campionamento. Prima di eseguire l'eliminazione di un verbale, il servizio implementa un controllo di integrità referenziale logica: interroga il modello \textit{VerbalRoom} per verificare la presenza di locali attivi collegati all'entità. Se la verifica rileva dipendenze, l'operazione viene interrotta restituendo un errore. In caso di esito positivo, il servizio aggiorna i campi di tracciabilità dell'\textit{audit} (\texttt{delete\_user\_id} e \texttt{reason}), salva lo stato sul \textit{database} ed esegue il \textit{soft delete}, formalizzando l'\textit{output} in una struttura \textit{JsonResponse} standardizzata.
+
+\begin{lstlisting}[float=!ht, caption={Implementazione della logica di eliminazione logica nel Service Layer.}, captionpos=b, label={lst:verbal_service_delete}, basicstyle=\ttfamily]
+	class VerbalService
+	{
+		public function deleteVerbal(Verbal $verbal, string $reason)
+		{
+			if ($this->hasRelatedRooms($verbal)) {
+				return errorResponse();
+			}
+			
+			$verbal->delete_user_id = Auth::id();
+			$verbal->reason = $reason;
+			
+			$verbal->save();
+			$verbal->delete();
+			
+			return successResponse();
+		}
+	}
+\end{lstlisting}
+
+Dopo aver analizzato la logica applicativa implementata nel \textit{Service Layer}, è possibile risalire al componente che ne determina l'esecuzione. L'invocazione del metodo \textit{deleteVerbal}() avviene infatti all'interno del \textit{controller}, che rappresenta il punto di ingresso delle richieste provenienti dal \textit{client} e coordina l'interazione tra interfaccia utente e servizi applicativi.
+
+Nel modulo in esame, il \textit{VerbalController} riceve le richieste HTTP relative ai verbali di campionamento e delega l'esecuzione delle operazioni al \textit{VerbalService}. Tale approccio mantiene il \textit{controller} privo di logica di \textit{business}, limitandone le responsabilità alla validazione dei dati ricevuti e all'orchestrazione del flusso applicativo. L'integrazione con il \textit{VerbalService} avviene tramite il meccanismo della \textit{Constructor Dependency Injection}, gestita dal \textit{Service Container} di Laravel, che inserisce automaticamente l'istanza del servizio nel costruttore del \textit{controller}.
+
+Nel seguente esempio (Listato~\ref{lst:verbal_controller}) viene analizzata l'azione REST \textit{destroy}, utilizzata per gestire la richiesta di eliminazione di un verbale. Laravel risolve automaticamente l'entità richiesta attraverso il meccanismo di \textit{Implicit Model Binding}, mentre il \textit{controller} recupera i dati necessari dalla richiesta HTTP e li inoltra al servizio competente.
+
+L'implementazione evidenzia come il \textit{controller} mantenga una struttura minimale e focalizzata esclusivamente sulla gestione della richiesta. Tutte le decisioni operative vengono demandate al \textit{VerbalService}, ottenendo un codice più modulare, facilmente manutenibile e maggiormente testabile.
+
+\begin{lstlisting}[float=!ht, caption={Implementazione del Controller con Dependency Injection e azione REST destroy.}, captionpos=b, label={lst:verbal_controller}, basicstyle=\ttfamily]
+	class VerbalController extends Controller
+	{
+		protected VerbalService $verbalService;
+		
+		public function __construct(VerbalService $verbalService)
+		{
+			$this->verbalService = $verbalService;
+		}
+		
+		public function destroy(Verbal $verbal, Request $request)
+		{
+			$reason = $request->input('reason');
+			return $this->verbalService->deleteVerbal($verbal, $reason);
+		}
+	}
+\end{lstlisting}
+
+Dopo l'elaborazione della richiesta da parte del \textit{controller} e del \textit{service}, i dati vengono resi disponibili allo strato di presentazione, implementato mediante viste \textit{Blade}. Nel seguito viene analizzato il \textit{file} \texttt{show.blade.php}, responsabile della visualizzazione del dettaglio di un verbale di campionamento, del modulo Verbali come esempio rappresentativo del livello \textit{View}.
+
+La vista estende il \textit{layout} comune dell'applicazione attraverso la direttiva @extends, garantendo uniformità grafica e riutilizzo degli elementi condivisi dell'interfaccia. I dati recuperati dal \textit{controller} vengono resi disponibili alla vista. In particolare, il titolo del verbale viene generato dinamicamente tramite una logica di formattazione dedicata e memorizzata nella variabile \texttt{\$nameVerbal}. Poiché tale stringa include \textit{tag} di formattazione HTML non persistiti nel \textit{database}, si utilizza la sintassi \texttt{\{!! \$nameVerbal !!\}}, che disabilita l'\textit{escaping} automatico. La sicurezza del dato contro attacchi XSS è garantita dalla sanificazione preventiva operata a livello di \textit{backend}.
+
+Ai fini dell'esempio architetturale risulta particolarmente significativo il pulsante dedicato all'eliminazione del verbale (Listato \ref{lst:view_verbal_show}). La vista si limita infatti a presentare l'elemento grafico e a rendere disponibile l'identificativo dell'entità selezionata, senza implementare alcuna logica applicativa relativa alla cancellazione.
+
+\begin{lstlisting}[float=!ht, caption={Struttura della vista Blade per la visualizzazione del dettaglio del verbale.}, captionpos=b, label={lst:view_verbal_show}, basicstyle=\ttfamily]
+	@extends('layouts.app')
+	
+	@section('content')
+	<div class="card">
+	<div class="header">
+	<p id="verbal_title">
+	{!! $nameVerbal !!}
+	</p>
+	
+	<a href="javascript:void(0);" class="btn btn-light btn-delete-verbal" data-id="{{ $verbal->id }}" data-show="single">
+	<i class="material-icons">delete</i>
+	</a>
+	</div>
+	</div>
+	@endsection
+\end{lstlisting}
+
+L'interazione dell'utente con il pulsante viene gestita da uno \textit{script} JavaScript (Listato \ref{lst:js_delete_verbal}) associato alla classe \texttt{btn-delete-verbal}. Lo \textit{script} intercetta l'evento di \textit{click}, richiede una conferma dell'operazione tramite una finestra modale e raccoglie la motivazione della cancellazione. Una volta confermata l'azione, viene inviata una richiesta AJAX di tipo DELETE all'\textit{endpoint} esposto dal \textit{controller}.
+
+\begin{lstlisting}[float=!ht, caption={Gestione dell'evento click e sottomissione della richiesta AJAX tramite jQuery.}, captionpos=b, label={lst:js_delete_verbal}, basicstyle=\ttfamily]
+	$(document).on('click', '.btn-delete-verbal', function () {
+		
+		// Recupero dell'identificativo del verbale dall'elemento HTML
+		const verbalId = $(this).data('id');
+		var url = $('#urls_verbal').data('url-destroy');
+		
+		
+		// Intercettazione del flusso per l'acquisizione della motivazione
+		Swal.fire({
+			input: 'textarea'
+		}).then((result) => {
+			
+			// Esecuzione condizionata alla conferma dell'utente
+			if (result.isConfirmed) {
+				
+				// Inizializzazione della richiesta AJAX in modalita' HTTP DELETE
+				$.ajax({
+					url: url,
+					type: 'DELETE',
+					data: {
+						reason: result.value // Trasmissione del testo inserito nella modale
+					}
+				});
+			}
+		});
+	});
+\end{lstlisting}
+
+La vista e lo \textit{script} JavaScript non eseguono direttamente alcuna operazione sul \textit{database}, ma si limitano a raccogliere l'interazione dell'utente e ad inoltrarla ai livelli applicativi sottostanti. Il flusso della richiesta prosegue quindi nel \textit{VerbalController}, che delega l'elaborazione al \textit{VerbalService}, il quale applica le regole di \textit{business} e interagisce con il modello \textit{Verbal} tramite \textit{Eloquent} ORM.
+
+Questo esempio evidenzia la separazione delle responsabilità adottata nell'applicazione: la vista gestisce esclusivamente la presentazione e l'interazione con l'utente, il \textit{controller} coordina la richiesta, il \textit{service} implementa la logica applicativa e il modello si occupa della persistenza dei dati.
 
 \section{Automatismo}
+Gli automatismi implementati nell'applicazione supportano gli operatori nella gestione delle campagne di campionamento e delle analisi di laboratorio. Sono procedure \textit{software} che si attivano automaticamente al verificarsi di specifiche condizioni o azioni, con lo scopo di ridurre le attività manuali, garantire la coerenza dei dati e applicare uniformemente le regole di \textit{business}. Intervengono in momenti chiave come la generazione e sincronizzazione dei campioni, la produzione di documentazione ufficiale in formato PDF e la gestione della validazione dei rapporti di prova. Questi meccanismi centralizzano la logica applicativa, riducono il rischio di errore umano e mantengono le informazioni nel \textit{database} sempre aggiornate rispetto allo stato reale delle attività.
 
 \subsection{Campioni}
+La generazione e la sincronizzazione dei campioni avvengono tramite un automatismo applicativo che si attiva durante la convalida o l'annullamento della convalida del verbale (Listato \ref{lst:sincronizzazione_campioni}). Questo processo ha l'obiettivo di allineare la tabella dei campioni con lo stato reale della struttura gerarchica (\textit{Verbal} $\rightarrow$ \textit{VerbalRoom} $\rightarrow$ \textit{VerbalRoomModality} $\rightarrow$ \textit{VerbalRoomModalityPoint}). 
 
+L'intera operazione viene eseguita all'interno di una transazione \textit{database}, garantendo che tutte le modifiche vengano applicate in modo coerente. In caso di errore, il sistema annulla automaticamente le operazioni effettuate, evitando situazioni di inconsistenza tra i dati. Il sistema applica una logica idempotente, ovvero progettata per produrre sempre lo stesso risultato finale indipendentemente dal numero di esecuzioni consecutive. 
+
+L'automatismo può operare secondo due modalità differenti: convalida oppure annullamento della convalida. Nel caso di convalida, per ogni punto di campionamento vengono innanzitutto determinati i codici campione che dovrebbero essere presenti in base alla configurazione corrente. Successivamente vengono recuperati eventuali campioni precedentemente eliminati tramite \textit{soft-delete}. 
+
+Se alcuni dei campioni attesi risultano già presenti nello storico, questi vengono ripristinati anziché essere ricreati. In questo modo viene preservata la continuità dei dati e viene evitata la generazione di duplicati. Infine, il sistema confronta l'elenco dei campioni attesi con quelli già esistenti e crea esclusivamente quelli mancanti. Invece quando la convalida viene revocata, il sistema esegue l'operazione inversa. I campioni associati ai punti di campionamento non vengono eliminati fisicamente dal \textit{database}, ma sottoposti a \textit{soft-delete}.
+\begin{lstlisting}[float=!ht, caption={Pseudocodice del processo di generazione e sincronizzazione dei campioni.}, captionpos=b, label={lst:sincronizzazione_campioni}, basicstyle=\ttfamily, breaklines=true, breakatwhitespace=true]
+public function convalidateAllRooms(verbalId, newState):
+  Transazione.Esegui(
+	Per ogni Room associata a verbalId:
+	  Room.isCompleted = newState
+      Per ogni Modality associata a Room:
+		Se Modality NON e' bloccata:
+		  Modality.isCompleted = newState
+		  Per ogni Point associato a Modality:
+		    Point.isCompleted = newState
+			Se newState e' VERO:
+			  // Fase di Convalida
+			  expectedSamples = generaLabel(Point)
+			  ripristinaCampioni(expectedSamples)
+			  creaCampioniMancanti(expectedSamples)
+					
+			Altrimenti:
+			  // Fase di Annullamento		
+			  markDeletionInformation(Point)
+			  softDeleteSamples(Samples)
+				
+	) // Il framework gestisce Commit e Rollback automaticamente
+\end{lstlisting}
 \subsection{PDF}
+Il sistema gestisce l'emissione dei documenti formali attraverso moduli \textit{software} deputati alla generazione di \textit{report} in formato non modificabile (PDF). Il processo trasforma i dati relazionali memorizzati nel \textit{database} in un documento statico, archiviato fisicamente e reso disponibile all'utente. L'architettura di esportazione è supportata dalla libreria \textit{barryvdh/laravel-dompdf}.
 
+Poiché la generazione dei documenti avviene in molteplici moduli dell'applicativo, viene analizzata a titolo esemplificativo la procedura relativa al verbale di ispezione. Il flusso di esecuzione si articola nelle seguenti fasi:
+
+\begin{itemize}
+	\item \textbf{Ricostruzione del Grafo dei Dati:} A seguito della richiesta, il sistema interroga il \textit{database} per aggregare le informazioni associate al verbale, includendo i metadati della campagna, l'anagrafica del cliente, la gerarchia dei locali e le specifiche delle apparecchiature.
+	\item \textbf{Rendering:} Il \textit{set} di dati viene iniettato all'interno di una vista predefinita, incaricata di organizzare le informazioni secondo il \textit{layout} della modulistica aziendale.
+	\item \textbf{Estrazione e Archiviazione Dinamica:} Il documento viene generato in memoria e il relativo flusso binario viene estratto. Il sistema calcola un percorso di destinazione univoco basato sullo stato del campionamento.
+	\item \textbf{Persistenza e Allineamento:} Il \textit{file} viene scritto fisicamente nello \textit{storage} dell'applicazione. Contestualmente, il nome del \textit{file} viene persistito nel \textit{record} del \textit{database} relazionale per mantenere la consistenza dello stato.
+	\item \textbf{Trasmissione:} Il sistema restituisce il flusso dati al \textit{browser} del \textit{client}.
+\end{itemize}
+
+Il Listato \ref{lst:generazione_pdf} mostra, a titolo di esempio, la generazione del PDF del verbale interno.
+\begin{lstlisting}[float=!ht, caption={Pseudocodice del processo di rendering, archiviazione e trasmissione del verbale in formato PDF.}, captionpos=b, label={lst:generazione_pdf}, basicstyle=\ttfamily\footnotesize, breaklines=true, breakatwhitespace=true, lineskip=-1pt]
+Se (verbal.type e' uguale a internal):	
+	datiContesto = recuperaGrafoDatiVerbale(verbalId)
+	pdf = PDF::loadView('admin.pdf.internal_verbal_pdf', datiContesto)
+	pdfContent = pdf->output()
+	
+	prefisso = determinaPrefissoStatoCampionamento(verbal.post_sampling)
+	nomeFile = generaCodiceUnivoco(verbal.id) + ".pdf"
+	percorso = calcolaPercorsoStorage(campaign.id, verbal.id, prefisso, nomeFile)
+	
+	Storage::put(percorso, pdfContent)
+	verbal.update([
+	'filename' => nomeFile
+	])
+
+	Ritorna pdf->stream(nomeFile)
+\end{lstlisting}
 \subsection{Blocco del rapporto di prova}
+L'ultimo automatismo analizzato riguarda il processo di verifica del Rapporto di Prova (RDP), documento che raccoglie e formalizza i risultati delle analisi eseguite sui campioni acquisiti durante le attività di campionamento.
 
+L'obiettivo principale di questo automatismo è garantire che, una volta completato il processo di approvazione, i dati utilizzati per la redazione del rapporto non possano essere modificati accidentalmente, preservando la coerenza tra il documento emesso e le informazioni archiviate nel sistema.
+
+Il processo viene attivato da un utente autorizzato durante la fase di verifica del rapporto e prevede due possibili esiti: approvazione oppure richiesta di revisione.
+
+Nel caso di approvazione, il sistema aggiorna lo stato del Rapporto di Prova marcandolo come verificato e bloccato. Contestualmente, il vincolo di blocco viene propagato a tutti i campioni associati al rapporto. Questa operazione garantisce che i dati analitici utilizzati per la generazione del documento rimangano immutati dopo la validazione, evitando situazioni in cui successive modifiche ai campioni possano rendere non coerente la documentazione già approvata. Inoltre, il sistema registra il messaggio di verifica e l'identità dell'utente che ha effettuato l'operazione, consentendo la ricostruzione dello storico delle approvazioni.
+
+Qualora il rapporto non venga approvato, il sistema attiva una procedura di revisione. In questo caso vengono annullati gli stati di validazione precedentemente assegnati e il documento viene nuovamente reso modificabile dagli operatori competenti. Infine, viene mandata una \textit{e-mail} ai tecnici contenente le motivazioni del rifiuto, permettendo ai soggetti coinvolti di individuare le anomalie riscontrate e procedere con le necessarie correzioni.
+
+\begin{lstlisting}[float=!ht, caption={Pseudocodice della procedura di verifica e gestione degli stati del Rapporto di Prova.}, captionpos=b, label={lst:verifica_rdp}, basicstyle=\ttfamily\footnotesize, breaklines=true, breakatwhitespace=true, , lineskip=-1pt]
+Procedura VerificaRapportoDiProva(richiesta, testReportId):
+	rapporto = RecuperaRapporto(testReportId)
+	azione = richiesta.OttieniParametro('action')
+	motivo = richiesta.OttieniParametro( 'reason_verification')
+	RegistraMessaggio(motivo, UtenteAttuale.id, rapporto.id)
+	Se azione e' uguale a 'validate':
+		rapporto.is_verified = VERO
+		rapporto.is_blocked = VERO
+		rapporto.SalvaSuDB()
+		Sample.FiltraPerGerarchiaRapporto(rapporto.id) .AggiornaMassivamente(is_blocked=VERO)
+	Altrimenti:
+		Mail.InviaNotificaRifiuto(rapporto, azione, motivo, UtenteAttuale)
+		rapporto.first_validation = FALSO
+		rapporto.is_validated_laboratory_director = NULL
+		rapporto.is_validated_laboratory_manager = NULL
+		rapporto.SalvaSuDB()
+	Fine Se
+	Ritorna ReindirizzaAllaVista('admin.testReport.show', rapporto.id)
+\end{lstlisting}
 \section{Migrazione dati dalla versione 1 alla versione 2}
 
 \section{Logging}
+Al fine di garantire la tracciabilità delle operazioni effettuate dagli utenti e soddisfare i requisiti di controllo e sicurezza, è stato implementato un sistema di \textit{Audit Logging}. Tale meccanismo consente di registrare sia gli eventi di autenticazione degli utenti sia le modifiche apportate ai dati.
+
+L'infrastruttura è stata progettata in modo da risultare indipendente dalla logica di \textit{business} dell'applicazione. In questo modo, le operazioni di registrazione vengono eseguite automaticamente senza introdurre codice aggiuntivo all'interno dei \textit{controller} o dei servizi responsabili delle funzionalità principali.
+
+Il sistema può essere suddiviso in due componenti principali:
+\begin{itemize}
+	\item tracciamento degli eventi di autenticazione;
+	\item tracciamento delle operazioni CRUD sui modelli applicativi.
+\end{itemize}
+
+La registrazione degli eventi di accesso è affidata alla classe \textit{LoginAuditSubscriber}, che sfrutta il sistema di eventi fornito dal \textit{framework} Laravel per intercettare le principali operazioni di autenticazione. In particolare, vengono monitorati:
+\begin{itemize}
+	\item accesso effettuato con successo (\textit{Login});
+	\item tentativo di accesso fallito (\textit{Failed});
+	\item disconnessione dell'utente (\textit{Logout}).
+\end{itemize}
+
+Per ciascun evento vengono raccolte e memorizzate alcune informazioni utili all'attività di \textit{audit}, tra cui l'identificativo dell'utente, l'indirizzo IP e il \textit{browser} utilizzato.
+
+La persistenza dei dati viene delegata al servizio \textit{AuditService}, responsabile della registrazione effettiva nella tabella \textit{login\_audits}.
+
+Nella gestione dei tentativi falliti (\textit{Failed}), il sistema implementa un controllo preventivo di esistenza dell'istanza utente. Se un utente tenta l'accesso con credenziali errate utilizzando un nome utente non censito, il sistema cattura l'anomalia gestendo il valore come \textit{null}, registrando l'evento di attacco o errore senza sollevare eccezioni di \textit{runtime}.
+
+\textit{Listing}~\ref{lst:login_audit_subscriber} mostra l'implementazione del \textit{subscriber}.
+
+\begin{lstlisting}[float=!ht, caption={Implementazione della classe LoginAuditSubscriber per il tracciamento degli eventi di autenticazione.}, captionpos=b, label={lst:login_audit_subscriber}, basicstyle=\ttfamily, breaklines=true, basicstyle=\ttfamily\footnotesize, lineskip=-1pt, breakatwhitespace=true]
+	class LoginAuditSubscriber
+	{
+		protected AuditService $auditService;
+		public function __construct(AuditService $auditService)
+		{
+			$this->auditService = $auditService;
+		}
+		public function handleUserLogin(Login $event): void
+		{
+			$this->auditService->logAuthEvent($event->user->getAuthIdentifier(), 'login');
+		}
+		public function handleUserFailed(Failed $event): void
+		{
+			$userId = $event->user ? $event->user->id : null;
+			$this->auditService->logAuthEvent($event->user?->getAuthIdentifier(), 'failed');
+		}
+		public function handleUserLogout(Logout $event): void
+		{
+			$userId = $event->user ? $event->user->getAuthIdentifier() : null;
+			$this->auditService->logAuthEvent($userId, 'logout');
+		}
+		public function subscribe(Dispatcher $events): void
+		{
+			$events->listen(Login::class, [self::class, 'handleUserLogin']);
+			$events->listen(Failed::class, [self::class, 'handleUserFailed']);
+			$events->listen(Logout::class, [self::class, 'handleUserLogout']);
+		}
+	}
+\end{lstlisting}
+
+Per registrare le modifiche apportate alle entità persistenti dell'applicazione è stata implementata un'infrastruttura di \textit{audit} basata sul \textit{pattern} \textit{Observer}. L'obiettivo è quello di automatizzare la registrazione delle operazioni di creazione, modifica ed eliminazione dei \textit{record}, evitando di inserire logiche di \textit{auditing} all'interno dei \textit{controller} o dei servizi applicativi.
+
+La soluzione adottata si basa su tre componenti principali:
+\begin{itemize}
+	\item l'interfaccia \texttt{AuditableContract};
+	\item il \textit{trait} \texttt{HasAudit};
+	\item l'\textit{observer} \texttt{AuditObserver}.
+\end{itemize}
+L'interazione tra tali componenti consente di applicare le funzionalità di \textit{audit} a qualsiasi modello dell'applicazione in maniera uniforme e riutilizzabile.
+
+Il primo elemento dell'architettura è rappresentato dall'interfaccia \texttt{AuditableContract} nel Listato \ref{lst:auditable_contract}, che definisce il comportamento minimo richiesto ai modelli soggetti a tracciamento. Attraverso questo contratto ogni entità fornisce le informazioni necessarie al sistema di \textit{audit}, tra cui:
+\begin{itemize}
+	\item la tabella di destinazione nella quale salvare i \textit{log};
+	\item l'eventuale identificativo dell'entità principale a cui associare il \textit{log};
+	\item la necessità di registrare o meno il dettaglio delle modifiche effettuate.
+\end{itemize}
+L'utilizzo di un'interfaccia permette di separare la logica di \textit{auditing} dalle specifiche implementazioni dei modelli, favorendo l'estensibilità del sistema e garantendo un comportamento coerente tra tutte le entità monitorate.
+
+\begin{lstlisting}[float=!t, caption={Definizione dell'interfaccia AuditableContract.}, captionpos=b, label={lst:auditable_contract}, basicstyle=\ttfamily\footnotesize, lineskip=-1pt, breaklines=true, breakatwhitespace=true]
+interface AuditableContract
+{
+	public function getAuditTableName(): string;
+	
+	public function getAuditRootId(): ?int;
+	
+	public function requiresAuditPayload(): bool;
+}
+\end{lstlisting}
+
+Per evitare la duplicazione di codice è stato realizzato il \textit{trait} \texttt{HasAudit}, che fornisce un'implementazione predefinita dei metodi definiti dall'interfaccia. L'adozione di questo approccio consente ai modelli di ottenere immediatamente il supporto all'\textit{audit} semplicemente importando il \textit{trait}, senza dover riscrivere la stessa logica in più classi. Oltre a fornire i valori di \textit{default}, il \textit{trait} registra automaticamente l'\textit{observer} responsabile del monitoraggio delle modifiche, semplificando ulteriormente l'integrazione del sistema di \textit{auditing}. Il Listato~\ref{lst:has_audit_trait} riporta l'implementazione del \textit{trait}.
+
+\begin{lstlisting}[float=!t, caption={Implementazione del trait HasAudit e dell'automazione di boot per l'osservazione.}, captionpos=b, label={lst:has_audit_trait}, basicstyle=\ttfamily\footnotesize, lineskip=-1pt, breaklines=true, breakatwhitespace=true]
+trait HasAudit
+{
+	public static function bootHasAudit(): void
+	{
+		static::observe(AuditObserver::class);
+	}
+	
+	public function getAuditTableName(): string
+	{
+		return 'list_audits';
+	}
+	
+	public function getAuditRootId(): ?int
+	{
+		return null;
+	}
+	
+	public function requiresAuditPayload(): bool
+	{
+		return true;
+	}
+}
+\end{lstlisting}
+
+La registrazione effettiva delle operazioni viene gestita dalla classe \texttt{AuditObserver}, che intercetta gli eventi generati dai modelli durante il loro ciclo di vita. In particolare, vengono monitorate le seguenti operazioni:
+\begin{itemize}
+	\item creazione di un nuovo \textit{record} (\textit{created});
+	\item modifica di un \textit{record} esistente (\textit{updated});
+	\item eliminazione permanente di un \textit{record} (\textit{forceDeleted}).
+\end{itemize}
+Quando uno di questi eventi si verifica, l'\textit{observer} delega la registrazione al servizio \textit{AuditService}, responsabile della costruzione e della persistenza del \textit{log}. L'implementazione completa è strutturata nel Listato~\ref{lst:audit_observer}.
+\begin{lstlisting}[float=!t, caption={Classe AuditObserver per la centralizzazione degli eventi legati alla persistenza.}, captionpos=b, label={lst:audit_observer}, basicstyle=\ttfamily\footnotesize, lineskip=-1pt, breaklines=true, breakatwhitespace=true,columns=flexible,]
+class AuditObserver
+{
+	protected AuditService $auditService;
+	
+	public function __construct(AuditService $auditService)
+	{
+		$this->auditService = $auditService;
+	}
+	
+	public function created(AuditableContract $model): void
+	{
+		$this->auditService->logEvent($model, 'created');
+	}
+	
+	public function updated(AuditableContract $model): void
+	{
+		if ($model->wasChanged('deleted_at') && count($model->getChanges()) === 1) {
+			return;
+		}
+		$this->auditService->logEvent($model, 'updated');
+	}
+	
+	public function forceDeleted(AuditableContract $model): void
+	{
+		$this->auditService->logEvent($model, 'deleted');
+	}
+}
+\end{lstlisting}
+
+Durante la fase di aggiornamento è stato introdotto un controllo aggiuntivo per distinguere le normali modifiche dalle operazioni di cancellazione logica (\textit{soft delete}). In questo modo vengono evitati \textit{log} duplicati e viene mantenuta una cronologia più chiara delle operazioni effettuate sugli oggetti applicativi. L'utilizzo del \textit{pattern} \textit{Observer} permette inoltre di centralizzare la logica di \textit{auditing} in un unico componente, riducendo l'accoppiamento con il resto dell'applicazione e facilitando eventuali estensioni future.
+
+La classe \textit{AuditService} rappresenta il punto centrale dell'intero sistema di \textit{auditing}. Tutti gli eventi rilevati dall'applicazione convergono infatti verso questo componente, indipendentemente dalla loro origine.
+
+In particolare, il servizio riceve informazioni da due sorgenti distinte:
+\begin{itemize}
+	\item \textit{LoginAuditSubscriber}, responsabile del tracciamento degli eventi di autenticazione;
+	\item \textit{AuditObserver}, incaricato di monitorare le operazioni CRUD sui modelli applicativi.
+\end{itemize}
+
+Questa scelta progettuale consente di centralizzare la logica di registrazione degli eventi, evitando duplicazioni di codice e mantenendo separata la fase di intercettazione degli eventi dalla loro effettiva persistenza nel \textit{database}.
+
+Per gli eventi di autenticazione il servizio utilizza il metodo \texttt{logAuthEvent()} nel Listato \ref{lst:log_auth_event}, che registra nella tabella \texttt{login\_audits} l'identificativo dell'utente, il tipo di evento, l'indirizzo IP del \textit{client} e il \textit{browser} utilizzato. Queste informazioni consentono di mantenere uno storico degli accessi alla piattaforma e di individuare eventuali tentativi di autenticazione non autorizzati.
+
+\begin{lstlisting}[float=!t, caption={Registrazione di un evento di autenticazione nella tabella login\_audits.}, captionpos=b, label={lst:log_auth_event}, basicstyle=\ttfamily\footnotesize, lineskip=-1pt, breaklines=true, breakatwhitespace=true]
+/**
+* Registra un evento di autenticazione nella tabella login_audits.
+*/
+public function logAuthEvent(?int $userId, string $eventType): void
+{
+	DB::table('login_audits')->insert([
+	'user_id'    => $userId,
+	'event_type' => $eventType,
+	'ip_address' => request()->ip(),
+	'user_agent' => request()->userAgent(),
+	'created_at' => now(),
+	]);
+}
+\end{lstlisting}
+
+Per le operazioni CRUD viene invece utilizzato il metodo \texttt{logEvent()} nel Listato \ref{lst:log_event}, responsabile della costruzione del \textit{record} di \textit{audit} associato alle entità applicative. Il metodo si occupa di strutturare le informazioni e memorizzarle in formato JSON, applicando specifici criteri di sanitizzazione e ottimizzazione delle risorse:
+\begin{itemize}
+	\item \textbf{Filtro dei metadati di sistema:} I campi tecnici legati alla gestione del \textit{database} (es. \texttt{id}, \texttt{created\_at}, \texttt{updated\_at}, \texttt{deleted\_at}) e gli attributi contenenti chiavi o \textit{hash} crittografici (es. \texttt{password}) vengono esclusi dal \textit{payload} per ragioni di sicurezza e per limitare l'occupazione di memoria su MySQL.
+	\item \textbf{Isolamento delle sole modifiche effettive:} In fase di \textit{update}, il servizio esegue un'intersezione logica tra lo stato originario del modello e l'insieme degli attributi che hanno subito una mutazione. Ciò consente di popolare il campo \texttt{old\_values} unicamente con lo storico dei campi alterati, escludendo i valori rimasti invariati. Lo stato successivo viene analogamente ridotto e inserito nel campo \texttt{new\_values}.
+	\item \textbf{Tracciamento Gerarchico (\texttt{root\_id}):} Qualora il modello implementi una struttura gerarchica complessa, il metodo \texttt{getAuditRootId()} restituisce l'identificativo dell'entità radice (es. il modulo documentale principale). Questa associazione semplifica la successiva ricostruzione cronologica di un intero blocco di dati correlati mediante l'esecuzione di \textit{query} indicizzate.
+\end{itemize}
+
+\begin{lstlisting}[float=!t, caption={Metodo logEvent per la strutturazione e persistenza del payload di audit.}, captionpos=b, label={lst:log_event}, basicstyle=\ttfamily\footnotesize, lineskip=-1pt, breaklines=true, breakatwhitespace=true]
+	public function logEvent(AuditableContract $model, string $eventType): void
+{
+	// 1. Verifica dei requisiti del contratto
+	if (!$model->requiresAuditPayload()) {
+		return;
+	}
+	
+	// 2. Estrazione e isolamento delle sole variazioni (Delta)
+	// I metodi interni si occupano di rimuovere password e metadati (es. created_at)
+	$oldValues = $this->extractFilteredOldValues($model, $eventType);
+	$newValues = $this->extractFilteredNewValues($model, $eventType);
+	
+	// 3. Costruzione del payload relazionale e gerarchico
+	$payload = [
+	'user_id'      => Auth::id(),
+	'event_type'   => $eventType,
+	'old_values'   => json_encode($oldValues),
+	'new_values'   => json_encode($newValues),
+	'root_id'      => $model->getAuditRootId(),
+	// ... [altri campi identificativi del polimorfismo omessi per brevita']
+	];
+	
+	// 4. Persistenza dinamica sulla tabella definita dal contratto
+	DB::table($model->getAuditTableName())->insert($payload);
+}
+\end{lstlisting}
+
+Il funzionamento polimorfico dell'architettura permette di estendere il sistema sia a modelli strutturati con vincoli gerarchici, sia a entità standard prive di relazioni complesse.
+
+Alcune entità rappresentano elementi centrali del dominio applicativo e necessitano di una gestione dedicata dei \textit{log}. In questi casi il modello ridefinisce i metodi forniti dal \textit{trait} per specificare una tabella di \textit{audit} dedicata e un identificativo gerarchico utilizzato per il raggruppamento degli eventi. Un esempio è rappresentato dal modello \textit{Verbal} nel Listato \ref{lst:audit_verbal}.
+
+\begin{lstlisting}[float=t, caption={Personalizzazione del contratto di audit nel modello Verbal.}, captionpos=b, label={lst:audit_verbal}, basicstyle=\ttfamily\footnotesize, lineskip=-1pt, breaklines=true, breakatwhitespace=true]
+class Verbal extends Model implements AuditableContract
+{
+	use HasAudit, EncryptedAttribute, HasFactory, SoftDeletes;
+	
+	public function getAuditTableName(): string
+	{
+		return 'verbal_audits';
+	}
+	
+	public function getAuditRootId(): ?int
+	{
+		return $this->id;
+	}
+}
+\end{lstlisting}
+
+In questo caso tutti gli eventi associati al verbale vengono salvati nella tabella \texttt{verbal\_audits}. Inoltre il valore restituito da \texttt{getAuditRootId()} consente di associare eventuali modifiche effettuate sulle entità correlate allo stesso verbale principale. Questa soluzione semplifica la consultazione dello storico delle operazioni e permette di ricostruire in modo immediato tutte le modifiche relative a uno specifico documento.
+
+Per le entità che non richiedono particolari personalizzazioni è sufficiente utilizzare il comportamento predefinito fornito dal \textit{trait}. Un esempio è rappresentato dal modello \textit{Device} nel Listato \ref{lst:audit_device}. In questo caso il sistema utilizza automaticamente i valori di \textit{default} definiti nel \textit{trait}:
+
+\begin{itemize}
+	\item i \textit{log} vengono salvati nella tabella \texttt{list\_audits};
+	\item non viene associato alcun identificativo gerarchico;
+	\item viene mantenuto il tracciamento delle modifiche tramite il calcolo del delta.
+\end{itemize}
+
+Grazie a questo approccio l'integrazione del sistema di \textit{audit} richiede un numero minimo di modifiche al modello e non comporta la duplicazione della logica di registrazione.
+\begin{lstlisting}[float=!ht, caption={Implementazione predefinita del contratto di audit nel modello Device.}, captionpos=b, label={lst:audit_device}, basicstyle=\ttfamily\footnotesize, lineskip=-1pt, breaklines=true, breakatwhitespace=true]
+class Device extends Model implements AuditableContract
+{
+	use HasAudit; // [...] Ulteriori trait omessi per brevita
+}
+\end{lstlisting}
