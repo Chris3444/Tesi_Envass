@@ -1,19 +1,33 @@
 \chapter{Implementazione del progetto}
+Questo capitolo descrive gli aspetti implementativi del progetto sviluppato, illustrando le soluzioni adottate e le scelte tecniche effettuate durante la realizzazione del sistema. L'obiettivo è mostrare come i concetti teorici introdotti nei capitoli precedenti siano stati applicati concretamente per costruire un'applicazione funzionale, organizzata e facilmente estendibile.
 
+In una prima fase si presentano le tecnologie utilizzate per lo sviluppo dell'applicazione e le motivazioni che hanno portato alla loro adozione. Di seguito si analizza la gestione del routing, approfondendo il sistema di utenti, ruoli e permessi, i meccanismi di autenticazione mediante middleware e l'organizzazione delle rotte applicative.
+
+Si illustra quindi l'implementazione dell'architettura Model-View-Controller (MVC), descrivendo la suddivisione delle responsabilità tra i diversi componenti del sistema e il flusso di elaborazione delle richieste. A seguire, si espongono i principali automatismi sviluppati, tra cui la gestione dei campioni, la generazione automatica dei documenti PDF e i meccanismi di blocco dei rapporti di prova.
+
+Infine, il capitolo descrive il processo di migrazione dei dati dalla prima alla seconda versione del sistema e le procedure di logging predisposte per il monitoraggio delle attività e la tracciabilità delle operazioni eseguite all'interno dell'applicazione.
+
+La trattazione di questi argomenti consente di completare la descrizione del sistema, fornendo una visione complessiva delle scelte progettuali in vista delle considerazioni conclusive.
 \section{Tecnologie utilizzate}
 L'architettura \textit{software} è stata interamente sviluppata utilizzando il \textit{framework} Laravel (versione 11), un \textit{framework} applicativo \textit{web} basato su PHP (versione 8.2) che adotta il paradigma orientato agli oggetti e supporta le funzionalità moderne del linguaggio, quali i tipi di intersezione, le proprietà in sola lettura e la scomposizione dei costruttori.\\
-L'applicazione si appoggia a un sistema di gestione di \textit{database} relazionale (RDBMS) MySQL (versione 8.0), configurato per garantire l'integrità referenziale e la persistenza dei dati attraverso l'uso del motore di memorizzazione InnoDB, il quale supporta transazioni ACID e vincoli di chiave esterna (\textit{foreign keys}).\\
-La gestione delle dipendenze del \textit{backend} è affidata al gestore di pacchetti Composer, il quale provvede all'\textit{autoloader} delle classi secondo lo standard PSR-4. Parallelamente, l'ecosistema \textit{front-end} è gestito tramite il \textit{package manager} npm. Il processo di compilazione e raggruppamento degli \textit{asset} (\textit{bundling}) è demandato a Vite, integrato nel \textit{framework} tramite il pacchetto ufficiale per Laravel. Per l'interfaccia utente è stato impiegato il \textit{framework} Bootstrap, affiancato dal preprocessore CSS Sass e dal tema AdminBSB \textit{Material Design} per fornire un \textit{design} reattivo. L'infrastruttura \textit{client-side} è ulteriormente supportata dalla libreria Axios per le comunicazioni HTTP asincrone e include i moduli per l'integrazione di componenti Vue.js.\\
+L'applicazione si appoggia a un sistema di gestione di \textit{database} relazionale (RDBMS) MySQL (versione 8.0), configurato per garantire l'integrità referenziale e la persistenza dei dati attraverso l'uso del motore di memorizzazione InnoDB, il quale supporta transazioni ACID e vincoli di chiave esterna (\textit{foreign keys}).
+
+La gestione delle dipendenze del \textit{backend} è affidata al gestore di pacchetti Composer, il quale provvede all'\textit{autoloader} delle classi secondo lo standard PSR-4. Parallelamente, l'ecosistema \textit{front-end} è gestito tramite il \textit{package manager} npm. Il processo di compilazione e raggruppamento degli \textit{asset} (\textit{bundling}) è demandato a Vite, integrato nel \textit{framework} tramite il pacchetto ufficiale per Laravel. Per l'interfaccia utente è stato impiegato il \textit{framework} Bootstrap, affiancato dal preprocessore CSS Sass e dal tema AdminBSB \textit{Material Design} per fornire un \textit{design} reattivo. L'infrastruttura \textit{client-side} è ulteriormente supportata dalla libreria Axios per le comunicazioni HTTP asincrone e include i moduli per l'integrazione di componenti Vue.js.
+
 Rispetto alle versioni precedenti, Laravel 11 introduce una struttura del progetto significativamente snellita: i \textit{file} di configurazione generali sono stati accorpati e la registrazione dei \textit{middleware} e delle rotte è stata centralizzata all'interno del \textit{file} \texttt{bootstrap/app.php}, eliminando i tradizionali \textit{file} \textit{Kernel} HTTP e \textit{Console}.
 \section{Routing}
 Il \textit{framework} Laravel utilizza un sistema di \textit{routing} che associa le richieste HTTP alle funzioni nei \textit{controller}. Attraverso questo meccanismo, ogni richiesta viene instradata verso il componente responsabile della relativa elaborazione, consentendo una chiara separazione tra gestione delle richieste, logica applicativa e presentazione dei dati.\\
-Nel progetto sviluppato il \textit{routing} svolge inoltre un ruolo centrale nella gestione della sicurezza, poiché costituisce il punto in cui vengono applicati i controlli di autenticazione e autorizzazione. Le rotte sono organizzate in gruppi logici e protette mediante \textit{middleware} dedicati, garantendo che le funzionalità del sistema siano accessibili esclusivamente agli utenti autorizzati.\\
+Nel progetto sviluppato il \textit{routing} svolge inoltre un ruolo centrale nella gestione della sicurezza, poiché costituisce il punto in cui vengono applicati i controlli di autenticazione e autorizzazione. Le rotte sono organizzate in gruppi logici e protette mediante \textit{middleware} dedicati, garantendo che le funzionalità del sistema siano accessibili esclusivamente agli utenti autorizzati.
+
 Nei paragrafi successivi vengono descritti il modello di gestione dei ruoli e dei permessi adottato, i \textit{middleware} utilizzati per il controllo degli accessi e l'organizzazione delle principali rotte applicative.
 \subsection{Utenti, ruoli e permessi}
-La gestione delle autorizzazioni è basata sul modello \textit{Role-Based Access Control} (RBAC), implementato mediante il pacchetto \textit{spatie/laravel-permission}. Tale approccio consente di separare l'identità dell'utente dai privilegi operativi assegnati, migliorando la flessibilità e la manutenibilità del sistema.\\
-L'infrastruttura autorizzativa è composta da due livelli distinti: I ruoli, che definiscono il profilo generale dell'utente all'interno dell'applicazione e i permessi, che determinano le operazioni specifiche che l'utente può eseguire.\\
-I principali ruoli applicativi sono: \textit{admin}, \textit{laboratory\_director}, \textit{laboratory\_manager}, \textit{management}, \textit{technician}, \textit{detector}, \textit{visitor} e \textit{computer\_technician}. Tali ruoli identificano le diverse figure professionali coinvolte nei processi operativi del laboratorio.\\
-Oltre ai ruoli, il sistema prevede un insieme di permessi granulari che consentono di controllare in modo puntuale l'accesso alle singole funzionalità. I permessi implementati sono riportati nella Tabella ~\ref{tab:permessi_sistema}.\\
+La gestione delle autorizzazioni è basata sul modello \textit{Role-Based Access Control} (RBAC), implementato mediante il pacchetto \textit{spatie/laravel-permission}. Tale approccio consente di separare l'identità dell'utente dai privilegi operativi assegnati, migliorando la flessibilità e la manutenibilità del sistema.
+
+L'infrastruttura autorizzativa è composta da due livelli distinti: I ruoli, che definiscono il profilo generale dell'utente all'interno dell'applicazione e i permessi, che determinano le operazioni specifiche che l'utente può eseguire.
+
+I principali ruoli applicativi sono: \textit{admin}, \textit{laboratory\_director}, \textit{laboratory\_manager}, \textit{management}, \textit{technician}, \textit{detector}, \textit{visitor} e \textit{computer\_technician}. Tali ruoli identificano le diverse figure professionali coinvolte nei processi operativi del laboratorio.
+
+Oltre ai ruoli, il sistema prevede un insieme di permessi granulari che consentono di controllare in modo puntuale l'accesso alle singole funzionalità. I permessi implementati sono riportati nella Tabella ~\ref{tab:permessi_sistema}.
 \begin{table}[t]
 	\centering
 	\begin{tabular}{ll}
@@ -34,16 +48,16 @@ Oltre ai ruoli, il sistema prevede un insieme di permessi granulari che consento
 Questa suddivisione consente di applicare il principio del minimo privilegio, assegnando a ciascun operatore esclusivamente le autorizzazioni necessarie allo svolgimento delle proprie attività. La verifica delle autorizzazioni avviene su due livelli differenti. I ruoli vengono controllati principalmente durante la fase di instradamento delle richieste mediante il \textit{middleware} \textit{role}, che limita l'accesso alle diverse aree applicative. I permessi granulari vengono invece verificati all'interno delle viste \textit{Blade} tramite la direttiva @can, che consente di mostrare o nascondere specifiche funzionalità in base alle autorizzazioni assegnate all'utente. Questo approccio permette di combinare un controllo degli accessi a livello di area applicativa con una gestione più fine delle singole operazioni disponibili all'interno dell'interfaccia.\\
 Come mostrato nel Listato \ref{lst:revisione_rdp}, il pulsante di revisione del Rapporto di Prova viene reso disponibile soltanto agli utenti in possesso del permesso\textit{ rdp\_reopening}.
 \begin{lstlisting}[float=t, caption={Esempio della direttiva @can.}, label={lst:revisione_rdp}, basicstyle=\ttfamily, captionpos=b, escapeinside={(*}{*)}]
-	@(*\textit{can}*)('rdp_(*\textit{reopening}*)')
-	<(*\textit{form}*) (*\textit{action}*)="{{ (*\textit{route}*)('admin.(*\textit{testReport}*).(*\textit{revisionTestReport}*)',
-			$((*\textit{testReport}*)->id) }}"
+@can('rdp_reopening')
+	<form action="{{route('admin.testReport.revisionTestReport',
+			$(testReport->id) }}"
 	method="POST">
 	@csrf
-	<(*\textit{button}*) (*\textit{type}*)="(*\textit{submit}*)">
-	Revisione RDP
-	</(*\textit{button}*)>
-	</(*\textit{form}*)>
-	@(*\textit{endcan}*)
+		<button type="submit">
+			Revisione RDP
+		</button>
+	</form>
+@endcan
 \end{lstlisting}
 
 \subsection{Middleware del login}

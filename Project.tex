@@ -3,7 +3,8 @@
 \section{Ente di riferimento: CIAS}
 Il progetto è stato commissionato dal CIAS~\autocite{YourHealthOur} (Centro ricerche
 Inquinamento Fisico Chimico Microbiologico Ambienti Alta Sterilità)
-dell'Università degli Studi di Ferrara. Il Centro è stato fondato nel 2005 come struttura di ricerca interna del Dipartimento di Architettura. Nel 2013, è stato trasformato in Centro Interdipartimentale dell'Ateneo ed attualmente coinvolge il Dipartimento di Architettura e il Dipartimento di Scienze dell’Ambiente e della Prevenzione, che dal 2024 ne costituisce il dipartimento di afferenza. \\
+dell'Università degli Studi di Ferrara. Il Centro è stato fondato nel 2005 come struttura di ricerca interna del Dipartimento di Architettura. Nel 2013, è stato trasformato in Centro Interdipartimentale dell'Ateneo ed attualmente coinvolge il Dipartimento di Architettura e il Dipartimento di Scienze dell’Ambiente e della Prevenzione, che dal 2024 ne costituisce il dipartimento di afferenza.
+
 Il CIAS integra ricerca scientifica, attività diagnostica e
 ingegneria impiantistica per la gestione del controllo della contaminazione e
 l’efficienza energetica in ambienti confinati complessi. Le sue attività si
@@ -14,64 +15,45 @@ articolano in quattro principali macroaree:
 	\item \textit{Heritage}: analisi dei fenomeni di degrado biologico, fisico e chimico di beni di interesse storico-artistico, con l'obiettivo di preservarli in modo efficace. Questo include la progettazione di impianti adeguati per la protezione degli spazi espositivi e museali.
 	\item \textit{Safety \& Training}: ricerca applicata nel settore della sicurezza sul lavoro e della prevenzione incendi. Accoppiata ad attività di formazione specialistica e aggiornamento professionale. Le attività riguardano procedure di biosicurezza e tecniche di analisi microbiologica.
 \end{enumerate}
-Le attività di campionamento e le analisi di laboratorio sono condotte in conformità a metodi ufficiali accreditati e seguono rigorosi protocolli standardizzati. Le procedure operative sono suddivise in due fasi sequenziali e interdipendenti: i metodi di campionamento stabiliscono le operazioni da svolgere sul campo e la strumentazione necessaria per il prelievo rappresentativo della matrice ambientale, come stabilito dalla norma UNI EN 13098 per la pianificazione del campionamento di \textit{bioaerosol}. I metodi di prova invece stabiliscono i protocolli analitici e microbiologici di laboratorio per la determinazione e la quantificazione della contaminazione, in conformità con \textit{standard} come la norma UNI EN ISO 4833 per la conta dei microrganismi vivi. In laboratorio, queste fasi costituiscono un ciclo operativo unico, formalmente convalidato congiuntamente dai due \textit{standard} (UNI EN 13098 + UNI EN ISO 4833). La conformità delle procedure e la competenza tecnica della struttura sono attestate dall'accreditamento di Accredia (Ente Italiano di Accreditamento), che ne garantisce l'affidabilità tramite verifiche ispettive e controlli periodici.
+Le attività di campionamento e le analisi di laboratorio sono condotte in conformità a metodi ufficiali accreditati e seguono rigorosi protocolli standardizzati. Le procedure operative sono suddivise in due fasi sequenziali e interdipendenti. La prima riguarda i metodi di campionamento, che stabiliscono le operazioni da svolgere sul campo e la strumentazione necessaria per il prelievo rappresentativo della matrice ambientale, come stabilito dalla norma UNI EN 13098 per la pianificazione del campionamento di \textit{bioaerosol}.La seconda è rappresentata dai metodi di prova, che stabiliscono i protocolli analitici e microbiologici di laboratorio per la determinazione e la quantificazione della contaminazione, in conformità con \textit{standard} come la norma UNI EN ISO 4833 per la conta dei microrganismi vivi. In laboratorio, queste fasi costituiscono un ciclo operativo unico, formalmente convalidato congiuntamente dai due \textit{standard} (UNI EN 13098 + UNI EN ISO 4833). La conformità delle procedure e la competenza tecnica della struttura sono attestate dall'accreditamento di Accredia (Ente Italiano di Accreditamento), che ne garantisce l'affidabilità tramite verifiche ispettive e controlli periodici.
 
 \section{Descrizione del progetto}
-Il progetto ENVASS nasce e si sviluppa all’interno del
-laboratorio CIAS per rispondere all'esigenza di creare un sistema gestionale
-centralizzato in grado di archiviare, tracciare e gestire tutte le informazioni
-relative ai campioni analizzati. Nella sua prima versione, il sistema era
-un'interfaccia \textit{web} statica, usata principalmente per catalogare manualmente i singoli campioni analizzati e per aggiungere foto. Poi, si potevano estrarre dei dati, da dei filtri di ricerca basati su variabili chiave come il progetto di riferimento, la struttura ospitante e quando sono state fatte le
-rilevazioni.\\
-In seguito, per rispondere alle crescenti richieste di digitalizzazione e ai severi requisiti di conformità e tracciabilità imposti dall'ente nazionale di accreditamento ACCREDIA, è stato necessario aggiornare la piattaforma con un'architettura più moderna e integrata, in grado di
-estendere il controllo informatico a tutte le fasi della filiera operativa e
-procedurale del laboratorio. \\
-Per realizzare questa transizione tecnologica, il CIAS ha
-affidato al laboratorio ACLAI la progettazione e lo sviluppo di una versione
-avanzata del sistema preesistente.\\
-L'analisi del flusso di lavoro ha portato alla mappatura dei
-processi principali e allo sviluppo di un'architettura \textit{software} suddivisa in
-sei macro-blocchi.
+Il progetto ENVASS nasce e si sviluppa all’interno del laboratorio CIAS per rispondere all'esigenza di creare un sistema gestionale centralizzato in grado di archiviare, tracciare e gestire tutte le informazioni relative ai campioni analizzati. Nella sua prima versione, il sistema era un'interfaccia \textit{web} statica, usata principalmente per catalogare manualmente i singoli campioni analizzati e le relative foto. Erano disponibili anche funzionalità di estrazione dati basati su filtri di ricerca le cui variabili chiave erano il progetto di riferimento, la struttura ospitante e le date di rilevazione.
+
+In seguito, per rispondere alle crescenti richieste di digitalizzazione e ai severi requisiti di conformità e tracciabilità imposti dall'ente nazionale di accreditamento ACCREDIA, è stato necessario aggiornare la piattaforma con un'architettura più moderna e integrata, in grado di estendere il controllo informatico a tutte le fasi della filiera operativa e procedurale del laboratorio.  
+Per realizzare questa transizione tecnologica, il CIAS ha affidato al laboratorio ACLAI la progettazione e lo sviluppo di una versione avanzata del sistema preesistente. L'analisi del flusso di lavoro ha portato alla mappatura dei processi principali e allo sviluppo di un'architettura \textit{software} suddivisa nei macro-blocchi, che andremo ad analizzare di seguito.
+
 
 \section{Anagrafica}
-L’anagrafica svolge il ruolo di registro centrale delle entità strutturali, dei soggetti e
-delle attività di laboratorio. \\
-Nel dettaglio, il modulo gestisce i profili dei committenti, ovvero i clienti
-esterni o gli enti terzi che richiedono le prestazioni analitiche del CIAS. Per
-ciascun committente, il sistema archivia sistematicamente le informazioni di
-contatto. Queste includono recapiti telefonici, indirizzi di posta elettronica
-e sedi fisiche. Questo garantisce la tracciabilità amministrativa e la corretta
-associazione delle commesse. \\
-L'anagrafica mappa i siti tramite legame gerarchico tra strutture e partizioni: le strutture
-rappresentano complessi edilizi, presidi ospedalieri o siti industriali; le
-partizioni ne definiscono le macro-suddivisioni interne.\\
-Le attività, invece, sono i progetti assegnati e gestiti dal laboratorio. Ogni attività è
-caratterizzata da una gerarchia di attributi che comprende una tipologia
-specifica che ne determina la natura e la finalità (ad esempio, progetto di
-ricerca, monitoraggio, ecc.) e uno stato operativo.\\
-Infine, nel blocco degli utenti viene censito il personale autorizzato a interagire con il
-sistema \textit{software} e a ciascun profilo viene assegnata una specifica matrice di
-diritti e permessi operativi. Questa categorizzazione è fondamentale per
-regolamentare in modo gerarchico i livelli di accesso alle funzionalità di
-inserimento, modifica o consultazione dei dati, garantendo la sicurezza
-informatica e l'integrità delle informazioni in conformità con i requisiti
-ispettivi.
+L’anagrafica svolge il ruolo di registro centrale delle entità strutturali, dei soggetti e delle attività di laboratorio. 
+
+Innanzitutto, il modulo gestisce i profili dei committenti, ovvero i clienti esterni o gli enti terzi che richiedono le prestazioni del CIAS. Per ciascun committente, il sistema archivia le informazioni di contatto, che includono recapiti telefonici, indirizzi di posta elettronica e sedi fisiche. Questo garantisce la tracciabilità amministrativa e la corretta associazione delle commesse. 
+
+L'anagrafica rappresenta i siti attraverso un modello gerarchico articolato su tre livelli. Le strutture identificano le entità principali, come complessi edilizi, presidi ospedalieri o siti industriali. Le partizioni definiscono le principali suddivisioni logiche o fisiche. Infine, le aree di partizione introducono un ulteriore livello di dettaglio, individuando specifici elementi spaziali all'interno delle partizioni, quali singoli edifici e relativi piani.
+
+Le attività, invece, sono i progetti assegnati e gestiti dal laboratorio. Ognuna è caratterizzata da attributi che comprendono una tipologia specifica che ne determina la natura e la finalità (ad esempio, progetto di ricerca, monitoraggio, ecc.) e uno stato operativo.
+
+Infine, nel blocco degli utenti viene censito il personale autorizzato a interagire con il sistema \textit{software} e a ciascun profilo viene assegnata una specifica matrice di diritti e permessi operativi. Questa categorizzazione è fondamentale per regolamentare in modo gerarchico i livelli di accesso alle funzionalità di inserimento, modifica o consultazione dei dati, garantendo la sicurezza informatica e l'integrità delle informazioni in conformità con i requisiti ispettivi. 
+
 \section{Liste}
-Il macro-blocco delle "Liste" costituisce il dizionario tecnico e il catalogo centralizzato del sistema ENVASS, raccogliendo i parametri chimici, biologici, strumentali e metodologici essenziali per la
+Il macro-blocco delle Liste costituisce il dizionario tecnico e il catalogo centralizzato del sistema ENVASS, raccogliendo i parametri chimici, biologici, strumentali e metodologici essenziali per la
 descrizione e la standardizzazione del progetto di campionamento e delle
 analisi. Il modulo offre un archivio di voci predefinite e codificate che
 riducono i tempi di inserimento manuale e garantiscono l'uniformità dei dati
-secondo le direttive di controllo della qualità.\\
+secondo le direttive di controllo della qualità.
+
 Il sistema definisce la configurazione spaziale e operativa
 dei prelievi tramite i punti di campionamento, che vengono associati a
-specifiche matrici e a dettagli descrittivi dell'area di indagine.\\
+specifiche matrici e a dettagli descrittivi dell'area di indagine.
+
 Una parte fondamentale del modulo è dedicata al censimento
 degli strumenti di campionamento. Per ogni apparecchiatura vengono registrati
 il fornitore, l'utilizzo previsto, le date di acquisto e di attivazione, lo
 stato operativo e i criteri di accettazione. Per garantire la rintracciabilità
 metrologica, il \textit{software} traccia lo stato di approvazione, i dati di taratura,
 la manutenzione e lo storico delle revisioni periodiche, annotando la data, il
-tecnico esecutore, il responsabile della verifica e le eventuali note.\\
+tecnico esecutore, il responsabile della verifica e le eventuali note.
+
 La standardizzazione delle procedure si basa sulla
 distinzione e sull'integrazione di due componenti fondamentali: i metodi di
 campionamento e i metodi di prova. I metodi di campionamento definiscono le
@@ -83,7 +65,8 @@ biologico da ricercare, sulla temperatura e sul tempo di incubazione necessari,
 nonché una descrizione testuale della procedura e il tipo di verbale
 applicabile. Inoltre, il macroblocco contiene la gestione dei lotti dei
 materiali di consumo, in cui vengono tracciati il terreno di coltura, il tipo
-di supporto, il fornitore e la data di scadenza.\\
+di supporto, il fornitore e la data di scadenza.
+
 Il modulo contiene tabelle per piastre, microrganismi e antibiotici utilizzati per i \textit{test} di suscettività e resistenza. La sezione include anche l'elenco delle stanze e le linee guida,
 che contengono i riferimenti normativi e i limiti di accettabilità associati ai
 controlli del laboratorio. Infine, sono incluse tabelle secondarie meno
@@ -95,20 +78,24 @@ viene generato a partire da una "Campagna di campionamento". Questa
 definisce a monte il committente, l'attività e la struttura di riferimento. Il
 rapporto tra queste due entità è di tipo uno-a-molti: una singola campagna può
 contenere più verbali, mentre un verbale appartiene rigorosamente a una sola
-campagna.\\
+campagna.
+
 Il documento viene creato unendo i dati della campagna, la specifica
 partizione, l'area di partizione e la tipologia di verbale, che può essere
 interno o esterno. Questa distinzione stabilisce chi esegue fisicamente il
 prelievo: se il verbale è interno, il campionamento viene svolto dai tecnici
 del CIAS; se invece è esterno, viene eseguito da un ente terzo che consegna
-successivamente i campioni al laboratorio.\\
+successivamente i campioni al laboratorio.
+
 Indipendentemente dalla tipologia scelta, le informazioni contenute nel verbale si suddividono sempre
 in tre categorie principali. La prima riguarda le stanze, le modalità e i punti
-di campionamento, definendo con precisione dove, come e cosa viene analizzato. \\
+di campionamento, definendo con precisione dove, come e cosa viene analizzato. 
+
 La seconda categoria include gli strumenti utilizzati e la planimetria del luogo. La terza categoria è
 l'accettazione, che viene compilata al rientro dal campionamento per i verbali
 interni o alla ricezione per quelli esterni, per registrare i dettagli del
-prelievo e del trasporto appena effettuati. \\
+prelievo e del trasporto appena effettuati. 
+
 Una volta completata la fase di accettazione, il sistema genera automaticamente un documento in formato PDF che funge da attestazione ufficiale e immodificabile dei dati inseriti. Una
 volta verificata la correttezza delle informazioni, il sistema genera automaticamente
 i singoli campioni e li inserisce nella sezione dedicata alle analisi.
@@ -117,12 +104,14 @@ Il modulo Analisi gestisce la fase sperimentale e diagnostica sui campioni micro
 sistema. Per poter essere analizzati, i campioni devono essere sottoposti a un
 periodo di incubazione a temperatura controllata che permette la crescita delle
 colonie batteriche, le quali possono poi essere quantificate. La durata di
-questo periodo dipende dal metodo di prova specifico utilizzato. \\
+questo periodo dipende dal metodo di prova specifico utilizzato. 
+
 Una volta terminata l'incubazione, si procede alla conta delle colonie cresciute e
 all'individuazione del tipo di batterio. Questi dati vengono inseriti nel
 sistema, insieme alla documentazione fotografica, e viene indicato il nome del
 tecnico che si è occupato dell'analisi, garantendo così la rintracciabilità
-dell'intera procedura. \\
+dell'intera procedura. 
+
 Il sistema consente di registrare i risultati relativi ai batteri Gram-negativi~\autocite{oliveiraGramNegativeBacteria2026} e alla speciazione come \textit{test} diagnostici aggiuntivi. A causa della loro complessa struttura cellulare, caratterizzata da una membrana esterna che ne aumenta la persistenza nell'ambiente e la resistenza agli agenti chimici, questi microrganismi costituiscono un fondamentale indicatore di contaminazione in ambito sanitario~\autocite{WHOBacterialPriority2024}. Per garantirne il monitoraggio epidemiologico, il \textit{software} prevede un campo dedicato in cui l'operatore può inserire il numero di colonie riscontrate.
 Per la speciazione, cioè la divisione in vari tipi di microrganismi, il tecnico sceglie il tipo di
 microrganismo e indica al sistema se è stato trovato. In caso positivo, è
@@ -131,7 +120,7 @@ espressa in Unità Formanti Colonia (CFU). Tutti questi dati vengono salvati nel
 sistema e resi immediatamente disponibili per la stesura del rapporto di prova
 finale.
 \section{Rapporti di prova}
-Il modulo "Rapporti di prova" gestisce la
+Il modulo Rapporti di prova gestisce la
 redazione e l'emissione del documento finale del laboratorio che riepiloga le
 informazioni sul campionamento e gli esiti delle analisi microbiologiche
 condotte. Il rapporto di prova si genera a partire dalla selezione delle
@@ -139,13 +128,15 @@ modalità operative. Al fine di ridurre gli errori manuali e velocizzare il
 processo, quasi tutte le informazioni necessarie vengono recuperate
 automaticamente dal sistema; l'unica eccezione riguarda le informazioni di
 legge nell'appendice, che l'operatore deve selezionare manualmente in base al
-caso specifico.\\
+caso specifico.
+
 Una volta preparato il documento, il tecnico lo sottopone
 all'approvazione del direttore e del responsabile del laboratorio. Questi
 ultimi possono approvare il rapporto di prova, rendendolo pronto per la
 spedizione, oppure rifiutarlo, inserendo una motivazione. In caso di rifiuto,
 il documento ritorna ai tecnici che, dopo aver apportato le modifiche
-necessarie, possono inviare una nuova richiesta di approvazione.\\
+necessarie, possono inviare una nuova richiesta di approvazione.
+
 La spedizione vera e propria al cliente viene eseguita dal
 responsabile dei sistemi informativi. Questa operazione attiva un blocco
 automatico e definitivo su tutte le informazioni associate al rapporto di
@@ -165,13 +156,14 @@ modo permanente qualsiasi operazione di creazione o modifica effettuata sugli
 oggetti del \textit{database}. Per ogni evento, il sistema verifica e memorizza tre
 informazioni essenziali: l'identità dell'utente che ha compiuto l'azione (chi),
 il dettaglio dei campi modificati con i relativi valori (cosa) e la data e
-l'ora dell'operazione (quando).\\
+l'ora dell'operazione (quando).
+
 Il sistema di \textit{logging} è strutturato in cinque sezioni
 specifiche:
 \begin{enumerate}\setlength{\itemsep}{0pt}\setlength{\parsep}{0pt}\setlength{\topsep}{0pt}\setlength{\partopsep}{0pt}
 	\item Liste e Anagrafica: monitora le variazioni dei dati di base del sistema. Il sistema registra la storia di tutte le modifiche fatte nel tempo a ogni oggetto (per esempio un committente, una struttura o un lotto di consumo nelle liste).
 	\item Verbali: traccia l'intero ciclo di vita del documento operativo, registrando ogni modifica apportata alle informazioni logistiche, alle aree di campionamento o alle impostazioni iniziali del verbale specifico;
 	\item Analisi: registra in modo granulare tutte le modifiche effettuate sui singoli campioni biologici associati a un determinato verbale, monitorando l'inserimento o la revisione dei dati critici, come la conta delle colonie, i risultati dei test sui batteri Gram-negativi e i parametri di speciazione.
-	\item Rapporti di prova (\textit{Test Report}): monitora la cronologia delle modifiche di ogni rapporto di prova specifico durante le fases di redazione, richiesta di approvazione, rifiuto o emissione della copia correttiva.
+	\item Rapporti di prova (\textit{Test Report}): monitora la cronologia delle modifiche di ogni rapporto di prova specifico durante le fasi di redazione, richiesta di approvazione, rifiuto o emissione della copia correttiva.
 	\item Autenticazione (\textit{Login}): gestisce il monitoraggio della sicurezza e degli accessi alla piattaforma. Questa sezione registra ogni evento di accesso andato a buon fine, ogni tentativo fallito e ogni operazione di \textit{logout}. Oltre all'utente e all'orario, il sistema memorizza l'indirizzo IP del dispositivo mittente e l'interfaccia del \textit{browser} (\textit{user agent}) utilizzato  per identificare l'origine dell'accesso.
 \end{enumerate}
