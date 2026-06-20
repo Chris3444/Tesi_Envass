@@ -12,30 +12,30 @@ Quando un browser riceve un documento HTML, ne genera una rappresentazione inter
 
 \subsection{La formattazione tramite CSS} 
 \begin{figure}[t]
-	\centering
-	\begin{lstlisting}[
-		language=HTML,
-		basicstyle=\small\ttfamily,
-		keywordstyle=\color{blue},
-		commentstyle=\color{gray},
-		stringstyle=\color{purple},
-		frame=single,
-		breaklines=true
-		]
-		/* 1. Anatomia di una regola CSS singola */
-		h1 {
-			color: #2c3e50;
-			font-size: 24px;
-		}
-		
-		/* 2. Raggruppamento di piu selettori per ottimizzazione del codice */
-		h1, h2, p {
-			font-family: 'Helvetica', sans-serif;
-			margin-bottom: 15px;
-		}
-	\end{lstlisting}
-	\caption{Esempio di regole CSS: anatomia di una regola e raggruppamento dei selettori.}
-	\label{fig:css_regole}
+\centering
+\begin{lstlisting}[
+	language=HTML,
+	basicstyle=\small\ttfamily,
+	keywordstyle=\color{blue},
+	commentstyle=\color{gray},
+	stringstyle=\color{purple},
+	frame=single,
+	breaklines=true
+	]
+	/* 1. Anatomia di una regola CSS singola */
+	h1 {
+		color: #2c3e50;
+		font-size: 24px;
+	}
+	
+	/* 2. Raggruppamento di piu selettori per ottimizzazione del codice */
+	h1, h2, p {
+		font-family: 'Helvetica', sans-serif;
+		margin-bottom: 15px;
+	}
+\end{lstlisting}
+\caption{Esempio di regole CSS: anatomia di una regola e raggruppamento dei selettori.}
+\label{fig:css_regole}
 \end{figure}
 I \textit{Cascading Style Sheets} (CSS) rappresentano il linguaggio dedicato esclusivamente alla formattazione ed all'aspetto visivo dei documenti \textit{web}. Se il HTML fornisce la semantica e i contenuti, il CSS interviene per garantire una rigorosa ``separazione'' tra i contenuti stessi e la loro presentazione esteriore. Questo paradigma consente il controllo centralizzato dell'aspetto visivo, permettendo di definire in modo totalmente indipendente e granulare dettagli cruciali come i colori, la tipografia, gli spazi (margini e \textit{padding}) e la disposition degli elementi sullo schermo.
 
