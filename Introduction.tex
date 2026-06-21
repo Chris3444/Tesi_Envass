@@ -1,0 +1,19 @@
+L’attività dei laboratori di prova richiede la gestione di processi operativi caratterizzati da elevati requisiti di tracciabilità, affidabilità e integrità dei dati. In particolare, nei contesti soggetti ad accreditamento e a procedure standardizzate, la corretta gestione delle informazioni assume un ruolo centrale per garantire la conformità normativa e la verificabilità delle operazioni svolte. Sebbene i sistemi informativi \textit{general-purpose} possano supportare processi aziendali di carattere generale, contesti altamente specializzati richiedono spesso funzionalità dedicate per la gestione dei flussi operativi, del ciclo di vita dei dati e della registrazione delle attività effettuate dagli utenti.
+
+Il presente lavoro di tesi si inserisce in questo contesto e prende in esame il caso di studio del CIAS (Centro ricerche Inquinamento Fisico Chimico Microbiologico Ambienti Alta Sterilità) dell’Università degli Studi di Ferrara. Il centro opera come laboratorio accreditato da ACCREDIA per l’esecuzione di prove microbiologiche normate, in un contesto caratterizzato da stringenti requisiti di qualità, tracciabilità e integrità del dato. 
+
+L’infrastruttura software utilizzata dal laboratorio, denominata ENVASS v1, presentava alcune limitazioni dovute alla parziale digitalizzazione del processo operativo. Il sistema era infatti utilizzato principalmente come archivio per la registrazione dei campioni analizzati e dei relativi risultati finali, senza una gestione integrata del \textit{workflow} analitico e della tracciabilità delle attività intermedie. L’assenza di un sistema automatizzato di gestione degli stati del \textit{workflow} e di meccanismi nativi di tracciamento delle modifiche poteva determinare frammentazione delle informazioni, disallineamenti tra i processi e difficoltà nella verifica delle attività durante le procedure ispettive.
+
+L’obiettivo del presente lavoro è stato quello di progettare e sviluppare una nuova piattaforma software, denominata ENVASS 2.0, finalizzata alla digitalizzazione completa del processo di laboratorio e per il rispetto dei requisiti di tracciabilità e integrità dei dati richiesti in ambito accreditato. L’attività svolta ha riguardato la definizione dell’architettura applicativa, la progettazione del \textit{database} e l’implementazione delle componenti software necessarie alla gestione dell’intero ciclo di vita delle analisi.
+
+Particolare attenzione è stata dedicata all’implementazione di meccanismi volti a garantire la consistenza e la verificabilità delle informazioni gestite dal sistema. Tra questi rientrano procedure di controllo dello stato dei processi, sistemi di \textit{audit trail} per la registrazione delle operazioni effettuate e meccanismi di protezione dei rapporti di prova validati, finalizzati a impedirne modifiche successive non autorizzate.
+
+L’elaborato è articolato in cinque capitoli, incluso il presente capitolo introduttivo. Il Capitolo 2, “Background”, fornisce il quadro tecnologico necessario alla comprensione del lavoro, con particolare riferimento alle tecnologie web, al linguaggio PHP e al framework Laravel. Il Capitolo 3, “Progetto ENVASS”, descrive il contesto applicativo del CIAS, illustrandone l’organizzazione e i requisiti, e presenta il progetto ENVASS analizzandone la struttura funzionale. Il Capitolo 4, “Implementazione del progetto”, presenta le principali scelte implementative e le soluzioni adottate nello sviluppo del sistema. Infine, il Capitolo 5, “Conclusione”, riporta gli esiti del lavoro e propone possibili sviluppi futuri.
+
+
+
+
+
+
+
+
