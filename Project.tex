@@ -1,8 +1,9 @@
 \chapter{Progetto ENVASS}
+\label{ch:envass}
 
 \section{Ente di riferimento: CIAS}
-Il progetto è stato commissionato dal CIAS~\autocite{YourHealthOur} (Centro ricerche
-Inquinamento Fisico Chimico Microbiologico Ambienti Alta Sterilità)
+Il progetto è stato commissionato dal Centro ricerche
+Inquinamento Fisico Chimico Microbiologico Ambienti Alta Sterilità~\autocite{YourHealthOur} (CIAS)
 dell'Università degli Studi di Ferrara. Il Centro è stato fondato nel 2005 come struttura di ricerca interna del Dipartimento di Architettura. Nel 2013, è stato trasformato in Centro Interdipartimentale dell'Ateneo ed attualmente coinvolge il Dipartimento di Architettura e il Dipartimento di Scienze dell’Ambiente e della Prevenzione, che dal 2024 ne costituisce il dipartimento di afferenza.
 
 Il CIAS integra ricerca scientifica, attività diagnostica e
@@ -15,7 +16,7 @@ articolano in quattro principali macroaree:
 	\item \textit{Heritage}: analisi dei fenomeni di degrado biologico, fisico e chimico di beni di interesse storico-artistico, con l'obiettivo di preservarli in modo efficace. Questo include la progettazione di impianti adeguati per la protezione degli spazi espositivi e museali.
 	\item \textit{Safety \& Training}: ricerca applicata nel settore della sicurezza sul lavoro e della prevenzione incendi. Accoppiata ad attività di formazione specialistica e aggiornamento professionale. Le attività riguardano procedure di biosicurezza e tecniche di analisi microbiologica.
 \end{enumerate}
-Le attività di campionamento e le analisi di laboratorio sono condotte in conformità a metodi ufficiali accreditati e seguono rigorosi protocolli standardizzati. Le procedure operative sono suddivise in due fasi sequenziali e interdipendenti. La prima riguarda i metodi di campionamento, che stabiliscono le operazioni da svolgere sul campo e la strumentazione necessaria per il prelievo rappresentativo della matrice ambientale, come stabilito dalla norma UNI EN 13098 per la pianificazione del campionamento di \textit{bioaerosol}.La seconda è rappresentata dai metodi di prova, che stabiliscono i protocolli analitici e microbiologici di laboratorio per la determinazione e la quantificazione della contaminazione, in conformità con \textit{standard} come la norma UNI EN ISO 4833 per la conta dei microrganismi vivi. In laboratorio, queste fasi costituiscono un ciclo operativo unico, formalmente convalidato congiuntamente dai due \textit{standard} (UNI EN 13098 + UNI EN ISO 4833). La conformità delle procedure e la competenza tecnica della struttura sono attestate dall'accreditamento di Accredia (Ente Italiano di Accreditamento), che ne garantisce l'affidabilità tramite verifiche ispettive e controlli periodici.
+Le attività di campionamento e le analisi di laboratorio sono condotte in conformità a metodi ufficiali accreditati e seguono rigorosi protocolli standardizzati. Le procedure operative sono suddivise in due fasi sequenziali e interdipendenti. La prima riguarda i metodi di campionamento, che stabiliscono le operazioni da svolgere sul campo e la strumentazione necessaria per il prelievo rappresentativo della matrice ambientale, come stabilito dalla norma UNI EN 13098 per la pianificazione del campionamento di \textit{bioaerosol}. La seconda è rappresentata dai metodi di prova, che stabiliscono i protocolli analitici e microbiologici di laboratorio per la determinazione e la quantificazione della contaminazione, in conformità con \textit{standard} come la norma UNI EN ISO 4833 per la conta dei microrganismi vivi. In laboratorio, queste fasi costituiscono un ciclo operativo unico, formalmente convalidato congiuntamente dai due \textit{standard} (UNI EN 13098 + UNI EN ISO 4833). La conformità delle procedure e la competenza tecnica della struttura sono attestate dall'accreditamento di Accredia (Ente Italiano di Accreditamento), che ne garantisce l'affidabilità tramite verifiche ispettive e controlli periodici.
 
 \section{Descrizione del progetto}
 Il progetto ENVASS nasce e si sviluppa all’interno del laboratorio CIAS per rispondere all'esigenza di creare un sistema gestionale centralizzato in grado di archiviare, tracciare e gestire tutte le informazioni relative ai campioni analizzati. Nella sua prima versione, il sistema era un'interfaccia \textit{web} statica, usata principalmente per catalogare manualmente i singoli campioni analizzati e le relative foto. Erano disponibili anche funzionalità di estrazione dati basati su filtri di ricerca le cui variabili chiave erano il progetto di riferimento, la struttura ospitante e le date di rilevazione.
@@ -29,7 +30,7 @@ L’anagrafica svolge il ruolo di registro centrale delle entità strutturali, d
 
 Innanzitutto, il modulo gestisce i profili dei committenti, ovvero i clienti esterni o gli enti terzi che richiedono le prestazioni del CIAS. Per ciascun committente, il sistema archivia le informazioni di contatto, che includono recapiti telefonici, indirizzi di posta elettronica e sedi fisiche. Questo garantisce la tracciabilità amministrativa e la corretta associazione delle commesse. 
 
-L'anagrafica rappresenta i siti attraverso un modello gerarchico articolato su tre livelli. Le strutture identificano le entità principali, come complessi edilizi, presidi ospedalieri o siti industriali. Le partizioni definiscono le principali suddivisioni logiche o fisiche. Infine, le aree di partizione introducono un ulteriore livello di dettaglio, individuando specifici elementi spaziali all'interno delle partizioni, quali singoli edifici e relativi piani.
+L'anagrafica rappresenta i luoghi di campionamento attraverso un modello gerarchico articolato su tre livelli. Le strutture identificano le entità principali, come complessi edilizi, presidi ospedalieri o siti industriali. Le partizioni definiscono le principali suddivisioni logiche o fisiche all’interno di una struttura. Infine, le aree di partizione introducono un ulteriore livello di dettaglio, individuando specifici elementi spaziali all'interno delle partizioni, quali singoli edifici e relativi piani.
 
 Le attività, invece, sono i progetti assegnati e gestiti dal laboratorio. Ognuna è caratterizzata da attributi che comprendono una tipologia specifica che ne determina la natura e la finalità (ad esempio, progetto di ricerca, monitoraggio, ecc.) e uno stato operativo.
 
@@ -74,7 +75,7 @@ rilevanti ma indispensabili alla funzionalità del sistema.
 \section{Verbali}
 Nella parte iniziale del verbale sono riportati i dati anagrafici necessari per raggiungere il luogo del
 prelievo e un riepilogo generale del monitoraggio da effettuare. Ogni verbale
-viene generato a partire da una "Campagna di campionamento". Questa
+viene generato a partire da una Campagna di campionamento. Questa
 definisce a monte il committente, l'attività e la struttura di riferimento. Il
 rapporto tra queste due entità è di tipo uno-a-molti: una singola campagna può
 contenere più verbali, mentre un verbale appartiene rigorosamente a una sola
@@ -90,7 +91,6 @@ successivamente i campioni al laboratorio.
 Indipendentemente dalla tipologia scelta, le informazioni contenute nel verbale si suddividono sempre
 in tre categorie principali. La prima riguarda le stanze, le modalità e i punti
 di campionamento, definendo con precisione dove, come e cosa viene analizzato. 
-
 La seconda categoria include gli strumenti utilizzati e la planimetria del luogo. La terza categoria è
 l'accettazione, che viene compilata al rientro dal campionamento per i verbali
 interni o alla ricezione per quelli esterni, per registrare i dettagli del
@@ -143,7 +143,7 @@ automatico e definitivo su tutte le informazioni associate al rapporto di
 prova, impedendo qualsiasi modifica successiva e garantendo l'integrità del
 dato. Se dopo il blocco ci si accorge di eventuali errori, il sistema non
 permette in alcun modo di sbloccare il documento originale. Per rimediare, è
-possibile creare una "copia correttiva", una funzione che consente di
+possibile creare una copia correttiva, una funzione che consente di
 modificare i dati precedentemente bloccati, generando un nuovo documento e
 lasciando comunque intatto e storicizzato il rapporto di prova iniziale da cui
 è stata tratta la copia.

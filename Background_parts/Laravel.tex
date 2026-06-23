@@ -1,9 +1,7 @@
 \section{Architettura del Framework Laravel}
-\textit{Laravel} è un \textit{framework} \textit{full-stack} \textit{open source} scritto in PHP. \textit{Laravel} è al momento, secondo le indagini di mercato condotte annualmente da \textit{JetBrains} (all'interno del \textit{report} \textit{State of Developer Ecosystem}), il \textit{leader} assoluto fra i \textit{framework} PHP, scelto da oltre il 64\% degli sviluppatori PHP.~\autocite{StatePHP2025} 
-
+\textit{Laravel} è un \textit{framework} \textit{full-stack} \textit{open source} scritto in PHP. \textit{Laravel} è al momento, secondo le indagini di mercato condotte annualmente da \textit{JetBrains} (all'interno del \textit{report} \textit{State of Developer Ecosystem}), il \textit{leader} assoluto fra i \textit{framework} PHP, scelto da oltre il 64\% degli sviluppatori PHP~\autocite{StatePHP2025}.
 Il suo obiettivo primario è garantire una ``\textit{developer experience}'' eccellente, mettendo a disposizione strumenti potenti e raffinati per gestire la complessità delle applicazioni moderne.
-
-Inoltre, \textit{Laravel} si definisce un \textit{framework} progressivo, scalabile e \textit{community driven}. Progressivo, dato che è stato ideato per crescere insieme allo sviluppatore \textit{web} ed alle esigenze del progetto, risultando accessibile sia per sviluppatori \textit{junior}, offrendo però strumenti robusti per lo sviluppo di applicazioni di livello \textit{enterprise}. Scalabile, invece grazie alle caratteristiche di PHP e al supporto integrato per sistemi di \textit{cache} distribuita e veloce come \textit{Redis}, che facilitano lo \textit{scaling} orizzontale ed infine \textit{community driven}, dato che si basa sul contributo di migliaia di sviluppatori in tutto il mondo.~\autocite{InstallationLaravel13x} 
+Inoltre, \textit{Laravel} si definisce un \textit{framework} progressivo, scalabile e \textit{community driven}. Progressivo, dato che è stato ideato per crescere insieme allo sviluppatore \textit{web} ed alle esigenze del progetto, risultando accessibile anche per sviluppatori \textit{junior}, offrendo però strumenti robusti per lo sviluppo di applicazioni di livello \textit{enterprise}. Scalabile, grazie alle caratteristiche di PHP e al supporto integrato per sistemi di \textit{cache} distribuita e veloce come \textit{Redis}, che facilitano lo \textit{scaling} orizzontale; ed infine \textit{community driven}, dato che si basa sul contributo di migliaia di sviluppatori in tutto il mondo~\autocite{InstallationLaravel13x} .
 
 L'architettura del \textit{framework} è progettata per garantire una rigorosa separazione delle responsabilità (\textit{Separation of Concerns}). Questo obiettivo viene conseguito tramite quattro pilastri metodologici: la gestione del \textit{routing} per l’instradamento delle richieste HTTP, l’adozione del \textit{pattern} MVC per la strutturazione del codice, la gestione delle dipendenze tramite il meccanismo di \textit{Dependency Injection}, e infine, l’astrazione dello strato di persistenza dei dati.
 
@@ -12,28 +10,24 @@ L'architettura del \textit{framework} è progettata per garantire una rigorosa s
 Il \textit{framework} \textit{Laravel} adotta nativamente il \textit{pattern} architetturale \textit{Model-View-Controller} (MVC) per separare in modo netto la logica di presentazione dalla logica di \textit{business} e di persistenza dei dati.
 
 \subsubsection*{View}
-\autocite{Controllers}
 La vista~\autocite{Views} è completamente isolata dalla logica di \textit{business} e non possiede logica decisionale. Non sa da dove provengono i dati, né se siano stati elaborati. Il suo unico compito è quello di esporre le informazioni inoltrate.
 La \textit{View} viene gestita tramite il motore di \textit{template} \textit{Blade} che, a partire da file con estensione \texttt{.blade.php}, genera dinamicamente il codice HTML. Questi file vengono salvati tipicamente nella \textit{directory} \texttt{resources/views}. \textit{Blade} è un motore \textit{template} molto leggero, accetta codice PHP puro all’interno delle viste e compila le viste in codice PHP che viene memorizzato nella \textit{cache} finché non viene modificato, il che significa che \textit{Blade} non aggiunge praticamente alcun sovraccarico (\textit{overhead}) all’applicazione.
 
-Le viste sono organizzate in modo gerarchico: è possibile definire scheletri strutturali globali (\textit{layout}) che descrivono parti fisse dell’interfaccia, come \textit{header} o \textit{footer}, che possono venir riutilizzati in ogni pagina. Allo smelly modo si possono creare componenti più piccoli, come bottoni specifici, che possono essere incapsulati e riutilizzati ovunque.
+Le viste sono organizzate in modo gerarchico: è possibile definire scheletri strutturali globali (\textit{layout}) che descrivono parti fisse dell’interfaccia, come \textit{header} o \textit{footer}, che possono venir riutilizzati in ogni pagina. Allo stesso modo si possono creare componenti più piccoli, come bottoni specifici, che possono essere incapsulati e riutilizzati ovunque.
 
 La sintassi standard di \textit{Blade} (\texttt{\{\{ \$variabile \}\}}) sanifica automaticamente l'output tramite la funzione \texttt{htmlspecialchars()}, bloccando all’origine attacchi \textit{Cross-Site-Scripting} (XSS) nel corpo della pagina HTML. 
 
 \subsubsection*{Model}
 Il Modello~\autocite{Eloquent} è incaricato di definire la struttura dei dati e di governare l’interazione concettuale con il database. Esso funziona tramite un’astrazione orientata agli oggetti, in cui ogni entità del sistema corrisponde ad una classe, che incapsula le proprietà del dato e le relative regole di \textit{business}. Vengono anche definite le relazioni con altri oggetti (per esempio, una struttura può contenere più stanze). 
-
 Il Modello, quindi, fornisce un’interfaccia ad alto livello per interrogare, modificare, o ricevere informazioni dal database attraverso metodi e oggetti \textit{software}, senza dover scrivere manualmente istruzioni nel linguaggio nativo del database.  
-
 Il modello inoltre garantisce la coerenza logica del dato applicando le regole stabilite. Gestisce la formattazione automatica dei dati (es. \textit{cast} da stringa a data), la protezione dei campi sensibili e la definizione di attributi calcolati. 
 
 \subsubsection*{Controller}
 Il Controllore~\autocite{Controllers} è il coordinatore fra i vari strati. Invece di definire tutta la logica di gestione all'interno dei file di instradamento (\textit{routing}), \textit{Laravel} incoraggia fortemente a raggruppare i comportamenti correlati all'interno di classi Controllore dedicate. Esso ha il compito di raggruppare e organizzare la logica necessaria per gestire le richieste HTTP in ingresso. Riceve la richiesta, la analizza e poi stabilisce quale risposta restituire; in un’architettura \textit{full-stack} il Controllore restituirà tipicamente un'istanza di una Vista \textit{Blade}, dopo aver interrogato uno o più modelli per ottenere le relative informazioni. 
 
 I Controllori sono di solito basati su un’architettura delle risorse (RESTful), dove esistono metodi standard per un insieme standard di azioni (como visualizzare un singolo elemento, mostrare un elenco, eliminare un elemento, modificarlo, \textit{etc.}). Questo ha lo scopo di standardizzare i controllori, così da rendere la logica interna pulita e prevedibile.
-\\
 
-In sintesi il ciclo MVC è il seguente (mostrato in Figura \ref{fig:ciclo_mvc}): 
+Il ciclo MVC può essere rappresentato come segue (mostrato in Figura \ref{fig:ciclo_mvc}): 
 \begin{enumerate}
 	\item Il controllore riceve la richiesta dall’utente e determina l’azione da eseguire.
 	\item Il Controllore interroga uno o più Modelli per ottenere o modificare le informazioni necessarie.
@@ -61,10 +55,7 @@ In questa fase vengono anche caricati i \textit{Service Providers}~\autocite{Ser
 \subsubsection*{Filtrazione tramite Middleware}
 Il \textit{Kernel} HTTP è anche responsabile del passaggio della richiesta attraverso lo \textit{stack} di \textit{middleware}~\autocite{MiddlewareLaravel13x} dell’applicazione. Ogni \textit{middleware} è una classe indipendente dotata di un metodo standard \texttt{handle(\$request, Closure \$next)} e costituisce un meccanismo per ispezionare, filtrare ed eventualmente respingere le richieste HTTP in entrata ed uscita. Il passaggio della richiesta allo strato successivo è unicamente possibile invocando \texttt{\$next(\$request)}.
 
-I \textit{middleware} sono divisi in due categorie:
-
-	 I \textit{middleware} globali, che rappresentano lo strato più esterno della \textit{pipeline} e vengono eseguiti su ogni richiesta HTTP in ingresso; il loro compito è validare lo stato globale dell’infrastruttura.
-	I \textit{middleware} di rotta, che sono filtri eseguiti solo dopo che il \textit{framework} ha analizzato l'URI della richiesta e ha determinato la rotta di destinazione. A questa categoria appartengono \textit{middleware} come \textit{Authenticate}, che verifica che l’utente sia autorizzato, o \textit{VerifyCsrfToken}, che implementa la difesa contro attacchi \textit{Cross-Site Request Forgery} (CSRF).
+I \textit{middleware} sono divisi in due categorie ben precise. I \textit{middleware} globali, che rappresentano lo strato più esterno della \textit{pipeline} e vengono eseguiti su ogni richiesta HTTP in ingresso; il loro compito è validare lo stato globale dell’infrastruttura. I \textit{middleware} di rotta, che sono filtri eseguiti solo dopo che il \textit{framework} ha analizzato l'URI della richiesta e ha determinato la rotta di destinazione. A questa categoria appartengono \textit{middleware} come \textit{Authenticate}, che verifica che l’utente sia autorizzato, o \textit{VerifyCsrfToken}, che implementa la difesa contro attacchi \textit{Cross-Site Request Forgery} (CSRF).
 
 
 \subsubsection*{L'Instradamento tramite Routing}
@@ -72,13 +63,12 @@ Dopo che la richiesta supera i \textit{middleware} globali, viene consegnata al 
 
 Il \textit{router} confronta questa richiesta con l’elenco delle rotte definite all’interno della cartella \texttt{/routes}. Queste rotte accettano un URI preciso insieme ad un controllore o una \textit{closure}. 
 
-Il \textit{router} esamina l'URI in ingresso e lo fa corrispondere a una rotta definita, eseguendo contestualmente eventuali \textit{middleware} specifici assegnati a quella rotta o a quel gruppo di rotte. Se la richiesta supera con successo tutti i \textit{middleware} assegnati, il \textit{router} effettua l'\_handover\_, che individua la classe controllore e invoca il metodo associato oppure esegue la \textit{closure} della rotta.
+Il \textit{router} esamina l'URI in ingresso e lo fa corrispondere a una rotta definita, eseguendo contestualmente eventuali \textit{middleware} specifici assegnati a quella rotta o a quel gruppo di rotte. Se la richiesta supera con successo tutti i \textit{middleware} assegnati, il \textit{router} effettua l'\textit{handover}, che individua la classe controllore e invoca il metodo associato oppure esegue la \textit{closure} della rotta.
 
 L'esecuzione della rotta o del \textit{controller} genera infine una risposta HTTP. Questa risposta compie un viaggio a ritroso passando nuovamente attraverso la catena di \textit{middleware} della rotta, dando all'applicazione la possibilità di modificare o esaminare la risposta in uscita. Infine, il metodo \texttt{handle} del \textit{Kernel} HTTP restituisce l'oggetto risposta, e il contenuto viene inviato al \textit{browser} dell'utente, concludendo così il ciclo di vita della richiesta.
 
 \subsection{Service Container}
 Il \textit{Service Container}~\autocite{ServiceContainerLaravel} si occupa di gestire le dipendenze delle classi e di eseguire le iniezioni delle dipendenze (\textit{Dependency Injection}, DI).
-
 La DI implementa in modo operativo il paradigma dell'Inversione del Controllo (\textit{Inversion of Control}, IoC), che consiste nel delegare la gestione delle dipendenze a un componente esterno, come il \textit{framework}, invece che alle singole classi. In questo modo la DI rappresenta la concretizzazione di questo principio: le dipendenze non vengono più create internamente dal componente che le richiede, ma vengono ``iniettate'' dall'esterno al momento della sua attivazione.
 
 Il \textit{Service Container} di \textit{Laravel} automatizza la \textit{Dependency Injection} tramite l’\textit{auto-wiring} (Risoluzione Automatica). Sfruttando la \textit{Reflection} API di PHP, il \textit{container} analizza il costruttore della classe per identificare il \textit{type-hinting}, ovvero le dichiarazioni esplicite di classi o interfacce sui parametri del metodo. Una volta determinato il tipo richiesto, il \textit{container} risolve ricorsivamente la dipendenza, istanziando e configurando completamente l’istanza della classe principale, eliminando così la necessità di mappature o configurazioni manuali.
