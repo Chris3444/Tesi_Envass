@@ -1,0 +1,442 @@
+\documentclass[10pt, aspectratio=169]{beamer}
+
+% --- TEMA MODERNO ---
+\usetheme{metropolis} 
+
+% --- COLORI PERSONALIZZATI (Abbinati ai tuoi schemi TikZ) ---
+\definecolor{myteal}{HTML}{008080}
+\setbeamercolor{palette primary}{bg=myteal, fg=white}
+\setbeamercolor{progress bar}{fg=orange, bg=myteal!30}
+\setbeamercolor{title separator}{fg=orange}
+\setbeamercolor{alerted text}{fg=orange}
+\metroset{block=fill} % Aggiunge uno sfondo leggero ai blocchi di testo
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[italian]{babel}
+\usepackage{graphicx}
+
+% --- FONT MODERNO ---
+\usepackage[default]{FiraSans} % Font pulito, altamente leggibile e moderno
+
+\usepackage{tikz}
+\usetikzlibrary{positioning, arrows.meta, shapes.geometric, calc}
+
+\title{Envass 2.0: un sistema gestionale per l'analisi microbiologica}
+\subtitle{Digitalizzazione, Automazione e Integrità del Dato}
+\author{Candidato: Christian Mick \\ Relatore: Prof. Guido Sciavicco \\ Correlatore: Dott. Michele Ghiotti}
+\institute{Università degli Studi di Ferrara \\ Corso di Laurea in Informatica}
+\date{A.A. 2025 - 2026}
+
+\begin{document}
+	
+
+	\begin{frame}
+		\titlepage
+	\end{frame}
+	% NUOVA SLIDE 1
+	\begin{frame}{Contesto: Evoluzione di ENVASS}
+		
+		\textbf{CIAS – Centro di Ricerca dell'Università di Ferrara}
+		
+		\vspace{0.3cm}
+		
+		ENVASS 2.0 nasce come evoluzione del sistema gestionale esistente
+		utilizzato per la gestione e il tracciamento di campioni ambientali
+		in ambienti ad alta sterilità.
+		
+		\vspace{0.5cm}
+		
+		\begin{columns}[T]
+			
+			\begin{column}{0.48\textwidth}
+				\begin{alertblock}{ENVASS 1.0}
+					\begin{itemize}
+						\item Funzionalità operative limitate
+						\item Processi parzialmente manuali
+						\item Minore automazione
+						\item Audit e tracciabilità ridotti
+					\end{itemize}
+				\end{alertblock}
+			\end{column}
+			
+			\begin{column}{0.48\textwidth}
+				\begin{block}{ENVASS 2.0}
+					\begin{itemize}
+						\item Workflow completamente digitalizzato
+						\item Generazione automatica dei campioni
+						\item Audit centralizzato
+						\item Integrità e immutabilità dei dati
+					\end{itemize}
+				\end{block}
+			\end{column}
+			
+		\end{columns}
+		
+	\end{frame}
+	% NUOVA SLIDE 2
+	\begin{frame}{Obiettivi del Progetto}
+		
+		\begin{columns}[T]
+			
+			\begin{column}{0.48\textwidth}
+				\begin{block}{Esigenze del laboratorio}
+					\begin{itemize}
+						\item Ridurre errori operativi
+						\item Automatizzare attività ripetitive
+						\item Garantire tracciabilità completa
+						\item Soddisfare requisiti ispettivi
+					\end{itemize}
+				\end{block}
+			\end{column}
+			
+			\begin{column}{0.48\textwidth}
+				\begin{block}{Obiettivi implementativi}
+					\begin{itemize}
+						\item Modellare il workflow reale
+						\item Garantire coerenza del database
+						\item Centralizzare audit e logging
+						\item Migliorare affidabilità del dato
+					\end{itemize}
+				\end{block}
+			\end{column}
+			
+		\end{columns}
+		
+		\vspace{0.6cm}
+		
+		\centering
+		\textbf{
+			Dal workflow fisico del laboratorio ad un sistema digitale tracciabile
+		}
+		
+	\end{frame}
+
+\begin{frame}{Stack Tecnologico}
+	
+	\begin{columns}[T]
+		
+		% SINISTRA
+		\begin{column}{0.42\textwidth}
+			
+			\begin{block}{Scelte tecnologiche}
+				\small
+				\begin{itemize}
+					\item \textbf{Laravel}\\
+					MVC, ORM Eloquent e middleware.
+					
+					\vspace{0.15cm}
+					
+					\item \textbf{Bootstrap}\\
+					Interfacce responsive e sviluppo rapido.
+					
+					\vspace{0.15cm}
+					
+					\item \textbf{jQuery}\\
+					Gestione dinamica di eventi e componenti.
+					
+					\vspace{0.15cm}
+					
+					\item \textbf{PHP + SQL}\\
+					Logica applicativa e persistenza dati.
+				\end{itemize}
+			\end{block}
+			
+		\end{column}
+		
+		% DESTRA
+		\begin{column}{0.58\textwidth}
+			
+			\centering
+			
+			\resizebox{\textwidth}{!}{
+				\begin{tikzpicture}[
+					node distance=1cm and 1cm,
+					core/.style={draw=orange, thick, fill=orange!10, rectangle, rounded corners, minimum height=1.2cm, minimum width=3.5cm, align=center, font=\Large\bfseries},
+					frontend/.style={draw=teal, thick, fill=teal!10, rectangle, rounded corners, minimum height=0.9cm, minimum width=2.8cm, align=center, font=\large\bfseries},
+					subfront/.style={draw=teal!60, thick, fill=white, rectangle, rounded corners, minimum height=0.6cm, minimum width=1.5cm, align=center, font=\normalsize},
+					backend/.style={draw=gray, thick, fill=gray!20, rectangle, rounded corners, minimum height=1cm, minimum width=3cm, align=center, font=\large\bfseries},
+					db/.style={draw=gray, thick, fill=gray!20, cylinder, shape border rotate=90, aspect=0.25, minimum height=1.6cm, minimum width=2.6cm, align=center, font=\large\bfseries},
+					line/.style={thick, draw=gray}
+					]
+					
+					\node[core] (laravel) {Laravel 11};
+					
+					\node[frontend, above=1cm of laravel, xshift=-2.2cm] (bootstrap) {Bootstrap};
+					\node[frontend, above=1cm of laravel, xshift=2.2cm] (jquery) {jQuery};
+					
+					\node[subfront, above=0.5cm of bootstrap, xshift=-1cm] (html) {HTML};
+					\node[subfront, above=0.5cm of bootstrap, xshift=1cm] (css) {CSS};
+					
+					\node[backend, below=1cm of laravel, xshift=-2.2cm] (php) {PHP 8.2};
+					\node[db, below=1cm of laravel, xshift=2.2cm] (sql) {SQL};
+					
+					\draw[line] (bootstrap)--(html);
+					\draw[line] (bootstrap)--(css);
+					
+					\draw[line] (bootstrap)--(laravel);
+					\draw[line] (jquery)--(laravel);
+					
+					\draw[line] (laravel)--(php);
+					\draw[line] (php)--(sql);
+					
+				\end{tikzpicture}
+			}
+			
+		\end{column}
+		
+	\end{columns}
+	
+\end{frame}
+	
+
+	
+
+	\begin{frame}{La Pipeline Operativa}
+		\centering
+		\vspace{1cm}
+		\resizebox{0.95\textwidth}{!}{
+			\begin{tikzpicture}[
+				node distance=1.5cm and 2cm,
+				box/.style={draw=teal, thick, fill=teal!10, rectangle, rounded corners, minimum height=1.5cm, minimum width=2.5cm, align=center, font=\bfseries}
+				]
+				% Nodi
+				\node[box] (campagna) {1. Campagna \\ di Campionamento};
+				\node[box, right=of campagna] (verbali) {2. Verbali \\ (Sopralluogo/Accettazione)};
+				\node[box, right=of verbali] (campioni) {3. Campioni \\ (Analisi Microbiologica)};
+				\node[box, right=of campioni] (rapporto) {4. Rapporto \\ di Prova (RDP)};
+				
+				% Frecce
+				\draw[-{Latex[length=3mm]}, thick, teal] (campagna) -- (verbali);
+				\draw[-{Latex[length=3mm]}, thick, teal] (verbali) -- (campioni);
+				\draw[-{Latex[length=3mm]}, thick, teal] (campioni) -- (rapporto);
+			\end{tikzpicture}
+		}
+		\vspace{1.5cm}
+		\begin{itemize}
+			\item Un flusso sequenziale che mappa esattamente il protocollo fisico del laboratorio.
+			\item Ogni fase fornisce i metadati necessari alla fase successiva in modo automatizzato.
+		\end{itemize}
+	\end{frame}
+	
+
+	
+	
+	\begin{frame}{Generazione Automatica dei Campioni}
+		\centering
+		\vspace{0.2cm}
+		
+		\resizebox{0.95\textwidth}{!}{
+			\begin{tikzpicture}[
+				node distance=0.7cm and 1cm,
+				font=\sffamily,
+				startblock/.style={draw=teal!70!black, fill=teal!5, thick, rectangle, rounded corners=3pt, minimum height=0.9cm, minimum width=8.5cm, align=center, font=\sffamily\bfseries\color{teal!80!black}},
+				datablock/.style={draw=gray!80!black, fill=gray!5, thick, rectangle, rounded corners=3pt, minimum height=1cm, minimum width=6.5cm, align=center},
+				actionblock/.style={draw=orange!80!black, fill=orange!5, thick, rectangle, rounded corners=3pt, minimum height=1cm, minimum width=3.8cm, align=center, font=\sffamily\small\bfseries\color{orange!90!black}},
+				endblock/.style={draw=teal!70!black, fill=teal!5, thick, rectangle, rounded corners=3pt, minimum height=0.9cm, minimum width=8.5cm, align=center, font=\sffamily\bfseries\color{teal!80!black}},
+				arrow/.style={-{Latex[length=2.5mm, width=1.8mm]}, thick, gray!80!black}
+				]
+				
+				\node[startblock] (start) {Convalida del Verbale di Accettazione};
+				
+				\node[datablock, below=of start] (calc) {Calcolo dei Campioni Attesi \\ \footnotesize (in base a struttura e partizioni)};
+				
+				\node[actionblock, below left=0.8cm and 0.3cm of calc] (restore) {Ripristino Campioni \\ Eliminati (Soft-Delete)};
+				\node[actionblock, below right=0.8cm and 0.3cm of calc] (create) {Creazione Campioni \\ Nuovi/Mancanti};
+				
+				\node[endblock, below=3.2cm of calc] (end) {Allineamento completato: Database coerente con il prelievo reale};
+				
+				\draw[arrow] (start) -- (calc);
+				
+				\draw[arrow] (calc.south) -- ++(0,-0.3) -| (restore.north);
+				\draw[arrow] (calc.south) -- ++(0,-0.3) -| (create.north);
+				
+				\draw[arrow] (restore.south) -- ++(0,-0.4) -| ([xshift=-2.2cm]end.north);
+				\draw[arrow] (create.south) -- ++(0,-0.4) -| ([xshift=2.2cm]end.north);
+			\end{tikzpicture}
+		}
+		
+		
+		\begin{columns}[t]
+			\begin{column}{0.48\textwidth}
+				\textbf{Idempotenza}\\
+				\small Il sistema può rieseguire il calcolo senza duplicare i dati nel database.
+			\end{column}
+			\begin{column}{0.48\textwidth}
+				\textbf{Prevenzione errori}\\
+				\small Azzera linearmente il rischio di inserimento manuale non corretto.
+			\end{column}
+		\end{columns}
+	\end{frame}
+
+	% 5. Blocco del Rapporto di Prova (Schema)
+	\begin{frame}{Immutabilità: Blocco del Rapporto di Prova}
+		\centering
+		\vspace{0.2cm}
+		\resizebox{0.8\textwidth}{!}{
+			\begin{tikzpicture}[
+				box/.style={draw=gray, thick, fill=white, rectangle, rounded corners, minimum height=1.2cm, minimum width=4cm, align=center},
+				locked/.style={draw=red!80, thick, fill=red!10, rectangle, rounded corners, minimum height=1.2cm, minimum width=4cm, align=center, font=\bfseries},
+				arrow/.style={-{Latex[length=3mm]}, thick, red!80}
+				]
+				\node[locked] (rdp) {Rapporto di Prova (RDP) \\ \textcolor{red!80}{\textbf{[APPROVATO E BLOCCATO]}}};
+				
+				\node[locked, below left=2cm and 1cm of rdp] (campioni) {Campioni Microbiologici \\ \textcolor{red!80}{\textbf{[IN SOLA LETTURA]}}};
+				\node[locked, below right=2cm and 1cm of rdp] (verbali) {Verbali Collegati \\ \textcolor{red!80}{\textbf{[IN SOLA LETTURA]}}};
+				
+				\draw[arrow] (rdp) -- (campioni) node[midway, left, xshift=-0.2cm, text=black, font=\small, align=center] {Propagazione \\ Blocco};
+				\draw[arrow] (rdp) -- (verbali) node[midway, right, xshift=0.2cm, text=black, font=\small, align=center] {Propagazione \\ Blocco};
+			\end{tikzpicture}
+		}
+		\vspace{0.5cm}
+		\begin{itemize}
+			\item \textbf{Integrità garantita}: L'approvazione finale congela l'intero ramo dei dati pregressi.
+			\item In caso di errore, si ricorre alla \textbf{Copia Correttiva}: storicizza il documento errato e genera una nuova revisione tracciata.
+		\end{itemize}
+	\end{frame}
+	\begin{frame}{Immutabilità: Blocco del Rapporto di Prova}
+		\centering
+		\vspace{0.2cm}
+		
+		\resizebox{0.85\textwidth}{!}{
+			\begin{tikzpicture}[
+				node distance=0.8cm and 1.2cm,
+				font=\sffamily,
+				% Palette cromatica basata su tonalità di rosso desaturato e grigio tecnico
+				rootblock/.style={draw=red!80!black, fill=red!5, thick, rectangle, rounded corners=3pt, minimum height=1.2cm, minimum width=5.5cm, align=center},
+				leafblock/.style={draw=red!60!black, fill=gray!5, thick, rectangle, rounded corners=3pt, minimum height=1.2cm, minimum width=4.8cm, align=center},
+				arrow/.style={-{Latex[length=2.5mm, width=1.8mm]}, thick, red!70!black}
+				]
+				
+				% Nodo principale (Sorgente del blocco)
+				\node[rootblock] (rdp) {\textbf{Rapporto di Prova (RDP)} \\ \footnotesize\color{red!80!black}{\textbf{[APPROVATO E BLOCCATO]}}};
+				
+				% Nodi subordinati (Destinatari del blocco)
+				\node[leafblock, below left=1cm and 0.2cm of rdp] (campioni) {\textbf{Campioni Microbiologici} \\ \footnotesize\color{red!70!black}{\textbf{[IN SOLA LETTURA]}}};
+				\node[leafblock, below right=1cm and 0.2cm of rdp] (verbali) {\textbf{Verbali Collegati} \\ \footnotesize\color{red!70!black}{\textbf{[IN SOLA LETTURA]}}};
+				
+				% Punto di derivazione ortogonale per la propagazione
+				\coordinate (split) at ($(rdp.south)+(0,-0.4)$);
+				
+				% Linea di giunzione principale con etichetta unica centrata
+				\draw[thick, red!70!black] (rdp.south) -- (split) node[midway, right, font=\footnotesize\sffamily\color{black!80}] {Propagazione Blocco};
+				
+				% Ramificazioni con frecce direzionali
+				\draw[arrow] (split) -| (campioni.north);
+				\draw[arrow] (split) -| (verbali.north);
+			\end{tikzpicture}
+		}
+		
+		\vspace{0.6cm}
+		
+		% Organizzazione dei contenuti testuali in colonne bilanciate
+		\begin{columns}[t]
+			\begin{column}{0.48\textwidth}
+				\textbf{Integrità garantita}\\
+				\small L'approvazione finale congela l'intero ramo dei dati pregressi, impedendo alterazioni retroattive.
+			\end{column}
+			\begin{column}{0.48\textwidth}
+				\textbf{Copia Correttiva}\\
+				\small In caso di errore, il sistema storicizza il documento errato e genera una nuova revisione tracciata.
+			\end{column}
+		\end{columns}
+	\end{frame}
+	% 6. Logging 1: Architettura Listener e Observer (Schema)
+	\begin{frame}{Audit Logging: Architettura del Sistema}
+		\centering
+		\resizebox{0.9\textwidth}{!}{
+			\begin{tikzpicture}[
+				node distance=1cm and 2cm,
+				box/.style={draw=teal, thick, fill=white, rectangle, rounded corners, minimum height=1.2cm, minimum width=3cm, align=center},
+				sys/.style={draw=orange, thick, fill=orange!10, rectangle, minimum height=1.2cm, minimum width=3cm, align=center, font=\bfseries},
+				db/.style={draw=gray, thick, fill=gray!20, cylinder, shape border rotate=90, aspect=0.25, minimum height=2cm, minimum width=2.5cm, align=center},
+				arrow/.style={-{Latex[length=3mm]}, thick, gray}
+				]
+				
+				\node[box] (auth) {Eventi di Accesso \\ (Login, Logout, Failed)};
+				\node[box, below=1.5cm of auth] (crud) {Operazioni Dati \\ (Create, Update, Delete)};
+				
+				\node[sys, right=of auth] (listener) {Login Audit \\ Subscriber};
+				\node[sys, right=of crud] (observer) {Audit \\ Observer};
+				
+				\node[sys, fill=teal!10, draw=teal, right=2cm of observer, yshift=1.35cm] (service) {Audit Service \\ (Centralizzazione Payload)};
+				
+				\node[db, right=of service] (database) {Database \\ Logs};
+				
+				\draw[arrow] (auth) -- (listener);
+				\draw[arrow] (crud) -- (observer);
+				\draw[arrow] (listener) -| (service);
+				\draw[arrow] (observer) -| (service);
+				\draw[arrow] (service) -- (database);
+			\end{tikzpicture}
+		}
+		\vspace{0.5cm}
+		\begin{itemize}
+			\item Logica \textbf{completamente disaccoppiata} dal codice operativo (Inversione del controllo).
+			\item Intercetta automaticamente \textbf{CHI} ha agito, \textbf{COSA} ha cambiato e \textbf{QUANDO}.
+		\end{itemize}
+	\end{frame}
+	
+	% 7. Logging 2: Liste + Login
+	\begin{frame}{Audit Logging: Liste e Accessi}
+		\begin{columns}[T] % L'opzione [T] allinea le colonne in alto
+			\begin{column}{0.48\textwidth}
+				\begin{block}{Sicurezza e Accessi (Login)}
+					Monitoraggio capillare per prevenire e rintracciare anomalie:
+					\begin{itemize}
+						\item Tracciamento accessi riusciti, logout e \textbf{tentativi falliti}.
+						\item Memorizzazione \textbf{Indirizzo IP} e \textbf{User Agent}.
+						\item Eventi legati ad account sospesi o disattivati.
+					\end{itemize}
+				\end{block}
+			\end{column}
+			\begin{column}{0.48\textwidth}
+				\begin{block}{Anagrafiche e Liste}
+					Dizionari di base essenziali per la calibrazione del sistema:
+					\begin{itemize}
+						\item Storico delle modifiche a Metodi e Strumenti.
+						\item Prevenzione modifiche silenziose ai parametri normativi.
+						\item Registrazione delta (solo i campi alterati).
+					\end{itemize}
+				\end{block}
+			\end{column}
+		\end{columns}
+	\end{frame}
+	
+	% 8. Logging 3: Verbali, Campioni, RDP
+	\begin{frame}{Audit Logging: Workflow Analitico}
+		\textbf{Tracciamento di Verbali, Campioni e Rapporti di Prova}
+		\vspace{0.4cm}
+		\begin{itemize}
+			\item \textbf{Isolamento Delta}: Memorizzazione mirata. Il sistema calcola l'intersezione tra i dati pre e post-modifica. Vengono salvati \textit{solo} i campi variati.
+			\item \textbf{Tracciamento Gerarchico (\texttt{root\_id})}: Le modifiche ai singoli campioni mantengono un legame logico con il documento radice (Verbale o RDP), permettendo estrazioni rapide.
+			\item \textbf{Filtro Metadati}: Esclusione automatica nei log di chiavi tecniche o password per favorire la leggibilità ispettiva.
+		\end{itemize}
+		\vspace{0.3cm}
+		\begin{alertblock}{Esito per gli Ispettori}
+			Una cronologia trasparente, immutabile e immediatamente consultabile che rispetta al 100\% i criteri di qualità ACCREDIA.
+		\end{alertblock}
+	\end{frame}
+	
+	% 9. Grazie
+	\begin{frame}[standout]
+		Grazie per l'attenzione!
+	\end{frame}
+	
+	% 10. Bibliografia
+	\begin{frame}{Bibliografia}
+		\begin{thebibliography}{9}
+			\bibitem{html} HTML Standard - WHATWG.
+			\bibitem{robbins} J. N. Robbins, \textit{Learning Web Design: A Beginner's Guide}, 6th ed., O'Reilly, 2025.
+			\bibitem{ecma} ECMA-262, 16th Edition, ECMAScript Language Specification, 2025.
+			\bibitem{laravel} Laravel Documentation (v11/13.x) - \texttt{laravel.com/docs}
+			\bibitem{atzeni} P. Atzeni, \textit{Basi di dati: modelli e linguaggi di interrogazione}, McGraw-Hill, 2009.
+			\bibitem{who} WHO Bacterial Priority Pathogens List 2024, World Health Organization.
+		\end{thebibliography}
+	\end{frame}
+	
+	\begin{frame}
+		\titlepage
+	\end{frame}
+	
+\end{document}
