@@ -21,9 +21,8 @@
 
 \usepackage{tikz}
 \usetikzlibrary{positioning, arrows.meta, shapes.geometric, calc}
-
+\setbeamertemplate{bibliography item}[text]
 \title{Envass 2.0: un sistema gestionale per l'analisi microbiologica}
-\subtitle{Digitalizzazione, Automazione e Integrità del Dato}
 \author{Candidato: Christian Mick \\ Relatore: Prof. Guido Sciavicco \\ Correlatore: Dott. Michele Ghiotti}
 \institute{Università degli Studi di Ferrara \\ Corso di Laurea in Informatica}
 \date{A.A. 2025 - 2026}
@@ -37,25 +36,26 @@
 	% NUOVA SLIDE 1
 	\begin{frame}{Contesto: Evoluzione di ENVASS}
 		
-		\textbf{CIAS – Centro di Ricerca dell'Università di Ferrara}
+		\textbf{CIAS~\cite{cias} – Centro di Ricerca dell'Università di Ferrara}
 		
-		\vspace{0.3cm}
+		\vspace{0.2cm}
 		
 		ENVASS 2.0 nasce come evoluzione del sistema gestionale esistente
 		utilizzato per la gestione e il tracciamento di campioni ambientali
 		in ambienti ad alta sterilità.
 		
-		\vspace{0.5cm}
+		
+		\vspace{0.4cm}
 		
 		\begin{columns}[T]
 			
 			\begin{column}{0.48\textwidth}
-				\begin{alertblock}{ENVASS 1.0}
+				\begin{alertblock}{ENVASS 1.0 (Origini)}
 					\begin{itemize}
-						\item Funzionalità operative limitate
-						\item Processi parzialmente manuali
-						\item Minore automazione
-						\item Audit e tracciabilità ridotti
+						\item Interfaccia web statica
+						\item Catalogazione e inserimento foto manuali
+						\item Estrazione dati limitata a filtri base (progetto, struttura, date)
+						\item Mancanza di controllo sull'intera filiera operativa
 					\end{itemize}
 				\end{alertblock}
 			\end{column}
@@ -74,43 +74,8 @@
 		\end{columns}
 		
 	\end{frame}
-	% NUOVA SLIDE 2
-	\begin{frame}{Obiettivi del Progetto}
-		
-		\begin{columns}[T]
-			
-			\begin{column}{0.48\textwidth}
-				\begin{block}{Esigenze del laboratorio}
-					\begin{itemize}
-						\item Ridurre errori operativi
-						\item Automatizzare attività ripetitive
-						\item Garantire tracciabilità completa
-						\item Soddisfare requisiti ispettivi
-					\end{itemize}
-				\end{block}
-			\end{column}
-			
-			\begin{column}{0.48\textwidth}
-				\begin{block}{Obiettivi implementativi}
-					\begin{itemize}
-						\item Modellare il workflow reale
-						\item Garantire coerenza del database
-						\item Centralizzare audit e logging
-						\item Migliorare affidabilità del dato
-					\end{itemize}
-				\end{block}
-			\end{column}
-			
-		\end{columns}
-		
-		\vspace{0.6cm}
-		
-		\centering
-		\textbf{
-			Dal workflow fisico del laboratorio ad un sistema digitale tracciabile
-		}
-		
-	\end{frame}
+
+
 
 \begin{frame}{Stack Tecnologico}
 	
@@ -122,22 +87,22 @@
 			\begin{block}{Scelte tecnologiche}
 				\small
 				\begin{itemize}
-					\item \textbf{Laravel}\\
+					\item \textbf{Laravel~\cite{laravel}}\\
 					MVC, ORM Eloquent e middleware.
 					
 					\vspace{0.15cm}
 					
-					\item \textbf{Bootstrap}\\
+					\item \textbf{Bootstrap~\cite{bootstrap}}\\
 					Interfacce responsive e sviluppo rapido.
 					
 					\vspace{0.15cm}
 					
-					\item \textbf{jQuery}\\
+					\item \textbf{jQuery~\cite{jquery}}\\
 					Gestione dinamica di eventi e componenti.
 					
 					\vspace{0.15cm}
 					
-					\item \textbf{PHP + SQL}\\
+					\item \textbf{PHP~\cite{php} + MySQL~\cite{atzeni}}\\
 					Logica applicativa e persistenza dati.
 				\end{itemize}
 			\end{block}
@@ -165,11 +130,11 @@
 					\node[frontend, above=1cm of laravel, xshift=-2.2cm] (bootstrap) {Bootstrap};
 					\node[frontend, above=1cm of laravel, xshift=2.2cm] (jquery) {jQuery};
 					
-					\node[subfront, above=0.5cm of bootstrap, xshift=-1cm] (html) {HTML};
-					\node[subfront, above=0.5cm of bootstrap, xshift=1cm] (css) {CSS};
+					\node[subfront, above=0.5cm of bootstrap, xshift=-1cm] (html) {HTML~\cite{html}};
+					\node[subfront, above=0.5cm of bootstrap, xshift=1cm] (css) {CSS~\cite{robbins}};
 					
 					\node[backend, below=1cm of laravel, xshift=-2.2cm] (php) {PHP 8.2};
-					\node[db, below=1cm of laravel, xshift=2.2cm] (sql) {SQL};
+					\node[db, below=1cm of laravel, xshift=2.2cm] (sql) {MySQL};
 					
 					\draw[line] (bootstrap)--(html);
 					\draw[line] (bootstrap)--(css);
@@ -202,7 +167,7 @@
 				]
 				% Nodi
 				\node[box] (campagna) {1. Campagna \\ di Campionamento};
-				\node[box, right=of campagna] (verbali) {2. Verbali \\ (Sopralluogo/Accettazione)};
+				\node[box, right=of campagna] (verbali) {2. Verbali};
 				\node[box, right=of verbali] (campioni) {3. Campioni \\ (Analisi Microbiologica)};
 				\node[box, right=of campioni] (rapporto) {4. Rapporto \\ di Prova (RDP)};
 				
@@ -215,7 +180,7 @@
 		\vspace{1.5cm}
 		\begin{itemize}
 			\item Un flusso sequenziale che mappa esattamente il protocollo fisico del laboratorio.
-			\item Ogni fase fornisce i metadati necessari alla fase successiva in modo automatizzato.
+			\item Ogni fase fornisce i dati necessari alla fase successiva in modo automatizzato.
 		\end{itemize}
 	\end{frame}
 	
@@ -239,7 +204,7 @@
 				
 				\node[startblock] (start) {Convalida del Verbale di Accettazione};
 				
-				\node[datablock, below=of start] (calc) {Calcolo dei Campioni Attesi \\ \footnotesize (in base a struttura e partizioni)};
+				\node[datablock, below=of start] (calc) {Calcolo dei Campioni Attesi};
 				
 				\node[actionblock, below left=0.8cm and 0.3cm of calc] (restore) {Ripristino Campioni \\ Eliminati (Soft-Delete)};
 				\node[actionblock, below right=0.8cm and 0.3cm of calc] (create) {Creazione Campioni \\ Nuovi/Mancanti};
@@ -268,175 +233,271 @@
 			\end{column}
 		\end{columns}
 	\end{frame}
+	
+	\begin{frame}{Immutabilità: Blocco del Rapporto di Prova}
+		\centering
+		% Spazio ridotto
+		\vspace{0.1cm}
+		
+		% Vincolo sull'altezza anziché sulla larghezza (richiede il pacchetto graphicx)
+		\resizebox{!}{0.80\textheight}{
+		\begin{tikzpicture}[
+			node distance=0.8cm and 1.2cm,
+			box/.style={
+				draw=teal,
+				thick,
+				fill=white,
+				text width=3.2cm,
+				minimum height=1.2cm,
+				align=center,
+				rounded corners=4pt,
+				font=\small
+			},
+			lockedbox/.style={
+				draw=red!80!black,
+				thick,
+				fill=red!5,
+				text width=3.2cm,
+				minimum height=1.2cm,
+				align=center,
+				rounded corners=4pt,
+				font=\small\bfseries,
+				text=red!80!black
+			},
+			decision/.style={
+				draw=orange,
+				thick,
+				fill=white,
+				diamond,
+				text width=2.2cm,
+				align=center,
+				inner sep=0pt,
+				font=\small
+			},
+			arrow/.style={
+				-{Latex[length=3mm]},
+				thick,
+				teal
+			},
+			redarrow/.style={
+				-{Latex[length=3mm]},
+				thick,
+				red!80!black
+			},
+			greenarrow/.style={
+				-{Latex[length=3mm]},
+				thick,
+				green!60!black
+			},
+			dasharrow/.style={
+				-{Latex[length=3mm]},
+				dashed,
+				thick,
+				orange
+			}
+			]
+			
+			% =========================================================================
+			% Nodi
+			% =========================================================================
+			
+			% Origine (Dati)
+			\node[box] (rapporto) {Origine Dati \\ \scriptsize(Sequenza Precedente)};
+			
+			\node[box, below=1.2cm of rapporto, xshift=-1cm] (redazione) {Redazione RDP \\ \scriptsize(Recupero automatico \\ + Appendice manuale)};
+			
+			\node[decision, below=0.8cm of redazione] (approvazione) {Approvazione \\ Direttore e \\ Responsabile?};
+			
+			\node[box, below=0.8cm of approvazione] (spedizione) {Spedizione al Cliente \\ \scriptsize(Resp. Sistemi Info.)};
+			
+			\node[lockedbox, left=2.2cm of spedizione] (blocco) {BLOCCO \\ DEFINITIVO \\ \scriptsize(Dati storicizzati)};
+			
+			% Copia Correttiva posizionata in asse verticale con il blocco e orizzontale con la redazione
+			\node[box, left=2.2cm of redazione] (copia) {Creazione Copia \\ Correttiva \\ \scriptsize(Nuovo documento)};
+			
+			% =========================================================================
+			% Connessioni
+			% =========================================================================
+			
+			% Flusso Standard
+			\draw[arrow, dotted] (rapporto.south) -- (redazione.north);
+			\draw[arrow] (redazione) -- (approvazione);
+			\draw[arrow] (approvazione) -- node[right, font=\scriptsize] {SI} (spedizione);
+			\draw[dasharrow] (approvazione.east) -- ++(1.2cm,0) |- node[pos=0.2, right, font=\scriptsize] {NO} (redazione.east);
+			\draw[redarrow] (spedizione) -- node[above, font=\scriptsize, text=red!80!black] {} (blocco);
+			
+			% Transizione in caso di errore (Ancore top-bottom dirette)
+			\draw[arrow] (blocco.north) -- node[left, font=\scriptsize] {Errore rilevato} (copia.south);
+			
+			% Vettore di Sblocco Dati (dalla Copia all'Origine Dati)
+			% Utilizza il percorso ortogonale |- per evitare collisioni
+			\draw[greenarrow, dashed] (copia.north) |- node[pos=0.25, left, font=\scriptsize, text=green!60!black] {Sblocco dati} (rapporto.west);
+			
+			% Reinserimento della copia nel flusso di redazione (Ancore laterali)
+			\draw[arrow] (copia.east) -- (redazione.west);
+			
+		\end{tikzpicture}
+		}
 
-	% 5. Blocco del Rapporto di Prova (Schema)
-	\begin{frame}{Immutabilità: Blocco del Rapporto di Prova}
-		\centering
-		\vspace{0.2cm}
-		\resizebox{0.8\textwidth}{!}{
-			\begin{tikzpicture}[
-				box/.style={draw=gray, thick, fill=white, rectangle, rounded corners, minimum height=1.2cm, minimum width=4cm, align=center},
-				locked/.style={draw=red!80, thick, fill=red!10, rectangle, rounded corners, minimum height=1.2cm, minimum width=4cm, align=center, font=\bfseries},
-				arrow/.style={-{Latex[length=3mm]}, thick, red!80}
-				]
-				\node[locked] (rdp) {Rapporto di Prova (RDP) \\ \textcolor{red!80}{\textbf{[APPROVATO E BLOCCATO]}}};
-				
-				\node[locked, below left=2cm and 1cm of rdp] (campioni) {Campioni Microbiologici \\ \textcolor{red!80}{\textbf{[IN SOLA LETTURA]}}};
-				\node[locked, below right=2cm and 1cm of rdp] (verbali) {Verbali Collegati \\ \textcolor{red!80}{\textbf{[IN SOLA LETTURA]}}};
-				
-				\draw[arrow] (rdp) -- (campioni) node[midway, left, xshift=-0.2cm, text=black, font=\small, align=center] {Propagazione \\ Blocco};
-				\draw[arrow] (rdp) -- (verbali) node[midway, right, xshift=0.2cm, text=black, font=\small, align=center] {Propagazione \\ Blocco};
-			\end{tikzpicture}
-		}
-		\vspace{0.5cm}
-		\begin{itemize}
-			\item \textbf{Integrità garantita}: L'approvazione finale congela l'intero ramo dei dati pregressi.
-			\item In caso di errore, si ricorre alla \textbf{Copia Correttiva}: storicizza il documento errato e genera una nuova revisione tracciata.
-		\end{itemize}
+		
 	\end{frame}
-	\begin{frame}{Immutabilità: Blocco del Rapporto di Prova}
-		\centering
-		\vspace{0.2cm}
-		
-		\resizebox{0.85\textwidth}{!}{
-			\begin{tikzpicture}[
-				node distance=0.8cm and 1.2cm,
-				font=\sffamily,
-				% Palette cromatica basata su tonalità di rosso desaturato e grigio tecnico
-				rootblock/.style={draw=red!80!black, fill=red!5, thick, rectangle, rounded corners=3pt, minimum height=1.2cm, minimum width=5.5cm, align=center},
-				leafblock/.style={draw=red!60!black, fill=gray!5, thick, rectangle, rounded corners=3pt, minimum height=1.2cm, minimum width=4.8cm, align=center},
-				arrow/.style={-{Latex[length=2.5mm, width=1.8mm]}, thick, red!70!black}
-				]
-				
-				% Nodo principale (Sorgente del blocco)
-				\node[rootblock] (rdp) {\textbf{Rapporto di Prova (RDP)} \\ \footnotesize\color{red!80!black}{\textbf{[APPROVATO E BLOCCATO]}}};
-				
-				% Nodi subordinati (Destinatari del blocco)
-				\node[leafblock, below left=1cm and 0.2cm of rdp] (campioni) {\textbf{Campioni Microbiologici} \\ \footnotesize\color{red!70!black}{\textbf{[IN SOLA LETTURA]}}};
-				\node[leafblock, below right=1cm and 0.2cm of rdp] (verbali) {\textbf{Verbali Collegati} \\ \footnotesize\color{red!70!black}{\textbf{[IN SOLA LETTURA]}}};
-				
-				% Punto di derivazione ortogonale per la propagazione
-				\coordinate (split) at ($(rdp.south)+(0,-0.4)$);
-				
-				% Linea di giunzione principale con etichetta unica centrata
-				\draw[thick, red!70!black] (rdp.south) -- (split) node[midway, right, font=\footnotesize\sffamily\color{black!80}] {Propagazione Blocco};
-				
-				% Ramificazioni con frecce direzionali
-				\draw[arrow] (split) -| (campioni.north);
-				\draw[arrow] (split) -| (verbali.north);
-			\end{tikzpicture}
-		}
-		
-		\vspace{0.6cm}
-		
-		% Organizzazione dei contenuti testuali in colonne bilanciate
-		\begin{columns}[t]
-			\begin{column}{0.48\textwidth}
-				\textbf{Integrità garantita}\\
-				\small L'approvazione finale congela l'intero ramo dei dati pregressi, impedendo alterazioni retroattive.
-			\end{column}
-			\begin{column}{0.48\textwidth}
-				\textbf{Copia Correttiva}\\
-				\small In caso di errore, il sistema storicizza il documento errato e genera una nuova revisione tracciata.
-			\end{column}
-		\end{columns}
-	\end{frame}
-	% 6. Logging 1: Architettura Listener e Observer (Schema)
+
+
 	\begin{frame}{Audit Logging: Architettura del Sistema}
 		\centering
-		\resizebox{0.9\textwidth}{!}{
+		\resizebox{0.95\textwidth}{!}{
 			\begin{tikzpicture}[
-				node distance=1cm and 2cm,
-				box/.style={draw=teal, thick, fill=white, rectangle, rounded corners, minimum height=1.2cm, minimum width=3cm, align=center},
-				sys/.style={draw=orange, thick, fill=orange!10, rectangle, minimum height=1.2cm, minimum width=3cm, align=center, font=\bfseries},
-				db/.style={draw=gray, thick, fill=gray!20, cylinder, shape border rotate=90, aspect=0.25, minimum height=2cm, minimum width=2.5cm, align=center},
-				arrow/.style={-{Latex[length=3mm]}, thick, gray}
+				node distance=0.6cm and 1.2cm,
+				box/.style={draw=teal, thick, fill=white, rectangle, rounded corners, minimum height=1.1cm, minimum width=3cm, align=center, font=\small},
+				sys/.style={draw=orange, thick, fill=orange!10, rectangle, minimum height=1.1cm, minimum width=3.2cm, align=center, font=\small\bfseries},
+				contract/.style={draw=purple, thick, fill=purple!5, rectangle, dashed, minimum height=1.1cm, minimum width=3.2cm, align=center, font=\small\itshape},
+				db_main/.style={draw=gray, thick, fill=gray!30, cylinder, shape border rotate=90, aspect=0.25, minimum height=2.2cm, minimum width=2.5cm, align=center, font=\small\bfseries},
+				db_table/.style={draw=gray, thick, fill=gray!10, rectangle, rounded corners, minimum height=0.8cm, minimum width=2.8cm, align=center, font=\footnotesize},
+				arrow/.style={-{Latex[length=2.5mm]}, thick, gray}
 				]
 				
-				\node[box] (auth) {Eventi di Accesso \\ (Login, Logout, Failed)};
-				\node[box, below=1.5cm of auth] (crud) {Operazioni Dati \\ (Create, Update, Delete)};
+				% --- LIVELLO EVENTI / MODELLI ---
+				\node[box] (auth) {Eventi di Autenticazione \\ (Login, Failed, Logout)};
+				\node[box, below=1.8cm of auth] (models) {Modelli Eloquent \\ (Verbal, Device, ecc.)};
 				
-				\node[sys, right=of auth] (listener) {Login Audit \\ Subscriber};
-				\node[sys, right=of crud] (observer) {Audit \\ Observer};
+				% --- LIVELLO INTERCETTAZIONE ---
+				\node[sys, right=of auth] (subscriber) {LoginAuditSubscriber \\ (Laravel Events)};
+				\node[contract, right=of models, yshift=0.7cm] (trait) {Trait HasAudit \\ \& AuditableContract};
+				\node[sys, right=of models, yshift=-0.7cm] (observer) {AuditObserver \\ (Pattern Observer)};
 				
-				\node[sys, fill=teal!10, draw=teal, right=2cm of observer, yshift=1.35cm] (service) {Audit Service \\ (Centralizzazione Payload)};
+				% --- LIVELLO SERVIZIO CENTRALE ---
+				\node[sys, fill=teal!10, draw=teal, right=5.2cm of auth, yshift=-1.2cm, minimum height=1.5cm] (service) {AuditService \\ \normalfont\small (Elaborazione Delta \\ e Routing Tabelle)};
 				
-				\node[db, right=of service] (database) {Database \\ Logs};
+				% --- LIVELLO DATABASE GENERALE ---
+				\node[db_main, right=1.5cm of service] (database) {MySQL \\ Database};
 				
-				\draw[arrow] (auth) -- (listener);
-				\draw[arrow] (crud) -- (observer);
-				\draw[arrow] (listener) -| (service);
+				% --- LIVELLO TABELLE SPECIFICHE ---
+				\node[db_table, right=1.2cm of database,yshift=2.0cm ] (t_login) {tabella: \\ \texttt{login\_audits}};
+				\node[db_table, below=0.2cm of t_login] (t_list) {tabella: \\ \texttt{list\_audits}};
+				\node[db_table, below=0.2cm of t_list] (t_verbal) {tabella: \\ \texttt{verbal\_audits}};
+				\node[db_table, below=0.2cm of t_verbal] (t_sample) {tabella: \\ \texttt{sample\_audits}};
+				\node[db_table,	below=0.2cm of t_sample] (t_report) {tabella: \\ \texttt{test\_report\_audits}};
+
+				
+				% --- CONNESSIONI ---
+				\draw[arrow] (auth) -- (subscriber);
+				\draw[arrow] (models) -- (trait);
+				\draw[arrow] (models) -- (observer);
+				
+				\draw[arrow] (subscriber) -| (service);
 				\draw[arrow] (observer) -| (service);
+				
+				% Connessione Servizio -> Database Generale
 				\draw[arrow] (service) -- (database);
+				
+				% Diramazioni Database Generale -> Tabelle
+				\draw[arrow] (database.east) -- ++(0.4,0) |- (t_login.west);
+				\draw[arrow] (database.east) -- ++(0.4,0) |- (t_list.west);
+				\draw[arrow] (database.east) -- ++(0.4,0) |- (t_verbal.west);
+				\draw[arrow] (database.east) -- ++(0.4,0) |- (t_sample.west);
+				\draw[arrow] (database.east) -- ++(0.4,0) |- (t_report.west);
+				
 			\end{tikzpicture}
 		}
-		\vspace{0.5cm}
-		\begin{itemize}
-			\item Logica \textbf{completamente disaccoppiata} dal codice operativo (Inversione del controllo).
-			\item Intercetta automaticamente \textbf{CHI} ha agito, \textbf{COSA} ha cambiato e \textbf{QUANDO}.
-		\end{itemize}
-	\end{frame}
-	
-	% 7. Logging 2: Liste + Login
-	\begin{frame}{Audit Logging: Liste e Accessi}
-		\begin{columns}[T] % L'opzione [T] allinea le colonne in alto
-			\begin{column}{0.48\textwidth}
-				\begin{block}{Sicurezza e Accessi (Login)}
-					Monitoraggio capillare per prevenire e rintracciare anomalie:
-					\begin{itemize}
-						\item Tracciamento accessi riusciti, logout e \textbf{tentativi falliti}.
-						\item Memorizzazione \textbf{Indirizzo IP} e \textbf{User Agent}.
-						\item Eventi legati ad account sospesi o disattivati.
-					\end{itemize}
-				\end{block}
-			\end{column}
-			\begin{column}{0.48\textwidth}
-				\begin{block}{Anagrafiche e Liste}
-					Dizionari di base essenziali per la calibrazione del sistema:
-					\begin{itemize}
-						\item Storico delle modifiche a Metodi e Strumenti.
-						\item Prevenzione modifiche silenziose ai parametri normativi.
-						\item Registrazione delta (solo i campi alterati).
-					\end{itemize}
-				\end{block}
-			\end{column}
-		\end{columns}
-	\end{frame}
-	
-	% 8. Logging 3: Verbali, Campioni, RDP
-	\begin{frame}{Audit Logging: Workflow Analitico}
-		\textbf{Tracciamento di Verbali, Campioni e Rapporti di Prova}
 		\vspace{0.4cm}
 		\begin{itemize}
-			\item \textbf{Isolamento Delta}: Memorizzazione mirata. Il sistema calcola l'intersezione tra i dati pre e post-modifica. Vengono salvati \textit{solo} i campi variati.
-			\item \textbf{Tracciamento Gerarchico (\texttt{root\_id})}: Le modifiche ai singoli campioni mantengono un legame logico con il documento radice (Verbale o RDP), permettendo estrazioni rapide.
-			\item \textbf{Filtro Metadati}: Esclusione automatica nei log di chiavi tecniche o password per favorire la leggibilità ispettiva.
+			\item Intercetta automaticamente \textbf{CHI} ha agito, \textbf{COSA} ha cambiato e \textbf{QUANDO}.
+			\item \textbf{Partizionamento dei Dati:} Il database segmenta i log in tabelle dedicate 
 		\end{itemize}
-		\vspace{0.3cm}
-		\begin{alertblock}{Esito per gli Ispettori}
-			Una cronologia trasparente, immutabile e immediatamente consultabile che rispetta al 100\% i criteri di qualità ACCREDIA.
-		\end{alertblock}
 	\end{frame}
+	\begin{frame}{Audit Logging: Sicurezza e Accessi}
+		\begin{block}{Sicurezza e Accessi (Login)}
+			Monitoraggio capillare per prevenire e rintracciare anomalie:
+			\begin{itemize}
+				\item Tracciamento accessi riusciti, logout e tentativi falliti.
+				\item Memorizzazione \textbf{Indirizzo IP} e \textbf{User Agent}.
+
+			\end{itemize}
+		\end{block}
+	\end{frame}
+	
+\begin{frame}{Audit Logging: Liste e Workflow Analitico}
+	\begin{columns}[T]
+		\begin{column}{0.48\textwidth}
+			\begin{block}{Anagrafiche e Liste}
+				Dizionari di base essenziali per la calibrazione del sistema (Metodi, Strumenti, Parametri):
+				\begin{itemize}
+					\item \textbf{Registrazione Delta}: Memorizzazione dei soli campi alterati rispetto allo stato precedente.
+				\end{itemize}
+			\end{block}
+		\end{column}
+		
+		\begin{column}{0.48\textwidth}
+			\begin{block}{Verbali, Campioni e Rapporti di Prova}
+				\begin{itemize}
+					\item \textbf{Registrazione Delta}: Medesima logica di memorizzazione isolata dei soli campi alterati.
+					\item \textbf{Vincolo Gerarchico (\texttt{root\_id})}: Unica differenziazione strutturale, utilizzata per legare le sotto-tabelle al documento radice.
+				\end{itemize}
+			\end{block}
+		\end{column}
+	\end{columns}
+\end{frame}
+
+\begin{frame}{ENVASS 2.0: dal processo manuale a un workflow integrato}
+	
+	\textbf{Risultati raggiunti}
+	\begin{itemize}
+		\item Workflow digitale end-to-end
+		\item Centralizzazione dei dati
+		\item Automazione del processo, audit trail e immutabilità
+	\end{itemize}
+	
+	\vspace{0.3cm}
+	
+	\textbf{Stato attuale}
+	\begin{itemize}
+		\item Sistema già in adozione parziale in ambiente operativo, con fase di testing e raccolta feedback
+	\end{itemize}
+	
+	\vspace{0.3cm}
+	
+	\textbf{Sviluppi futuri}
+	\begin{itemize}
+		\item AI per conteggio automatico delle colonie ed elaborazione delle immagini
+		\item Notifiche automatiche di fine incubazione per ottimizzare la sincronizzazione dei flussi di lavoro.
+	\end{itemize}
+
+\end{frame}
+
 	
 	% 9. Grazie
 	\begin{frame}[standout]
 		Grazie per l'attenzione!
 	\end{frame}
 	
-	% 10. Bibliografia
-	\begin{frame}{Bibliografia}
-		\begin{thebibliography}{9}
-			\bibitem{html} HTML Standard - WHATWG.
-			\bibitem{robbins} J. N. Robbins, \textit{Learning Web Design: A Beginner's Guide}, 6th ed., O'Reilly, 2025.
-			\bibitem{ecma} ECMA-262, 16th Edition, ECMAScript Language Specification, 2025.
-			\bibitem{laravel} Laravel Documentation (v11/13.x) - \texttt{laravel.com/docs}
-			\bibitem{atzeni} P. Atzeni, \textit{Basi di dati: modelli e linguaggi di interrogazione}, McGraw-Hill, 2009.
-			\bibitem{who} WHO Bacterial Priority Pathogens List 2024, World Health Organization.
-		\end{thebibliography}
-	\end{frame}
-	
+
 	\begin{frame}
-		\titlepage
-	\end{frame}
-	
+	\titlepage
+\end{frame}
+
+
+\begin{frame}[allowframebreaks]{Bibliografia}
+	\begin{thebibliography}{99}
+		\bibitem{cias} Your Health Is Our Job. url: https://cias-ferrara.it/ (visitato il giorno 11/06/2026).
+		
+		\bibitem{html} HTML Standard. url: https://html.spec.whatwg.org/multipage/introduction.html\#introduction (visitato il giorno 09/04/2026).
+		
+		\bibitem{robbins} Jennifer Niederst Robbins. Learning Web Design: A Beginner’s Guide to HTML, CSS, Javascript, and Web Images. Sixth edition. Santa Rosa, CA: O’Reilly, 2025. 1 p. isbn: 978-1-0981-3768-7.
+		
+		\bibitem{bootstrap} Get Started with Bootstrap - Bootstrap v5.2. url: https://getbootstrap.com/docs/5.2/getting-started/introduction/ (visitato il giorno 10/04/2026).
+		
+		\bibitem{jquery} OpenJS Foundation- openjsf.org. jQuery API Documentation. 17 Mag. 2026.
+		url: https://api.jquery.com/ (visitato il giorno 17/05/2026)
+		
+		\bibitem{laravel} Laravel 11.x - The Clean Stack for Artisans and Agents. Laravel. url: https://laravel.com/docs/11.x/ (visitato il giorno 30/05/2026).
+		
+		\bibitem{atzeni} Paolo Atzeni. Basi di dati: modelli e linguaggi di interrogazione. 3. ed. Milano: McGraw-Hill, 2009. isbn: 978-88-386-6600-1.
+		
+		\bibitem{php} PHP: Preface - Manual. url: https://www.php.net/manual/en/index.php (visitato il giorno 08/05/2026).
+		
+
+	\end{thebibliography}
+\end{frame}
+
+
 \end{document}
