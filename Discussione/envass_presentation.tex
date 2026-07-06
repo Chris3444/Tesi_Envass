@@ -27,16 +27,23 @@
 \institute{Università degli Studi di Ferrara \\ Corso di Laurea in Informatica}
 \date{A.A. 2025 - 2026}
 
+
 \begin{document}
 	
 
 	\begin{frame}
 		\titlepage
+		\begin{tikzpicture}[remember picture,overlay]
+			\node[anchor=south east] at 
+			($(current page.south east)+(-0.5,0.5)$)
+			{\includegraphics[width=2.5cm]{logo.png}};
+		\end{tikzpicture}
+		
 	\end{frame}
 	% NUOVA SLIDE 1
 	\begin{frame}{Contesto: Evoluzione di ENVASS}
 		
-		\textbf{CIAS~\cite{cias} – Centro di Ricerca dell'Università di Ferrara}
+		\textbf{CIAS~\cite{cias} – Centro ricerche Inquinamento fisico chimico microbiologico Ambienti alta Sterilità}
 		
 		\vspace{0.2cm}
 		
@@ -471,8 +478,13 @@
 	\end{frame}
 	
 
-	\begin{frame}
+\begin{frame}
 	\titlepage
+	\begin{tikzpicture}[remember picture,overlay]
+		\node[anchor=south east] at 
+		($(current page.south east)+(-0.5,0.5)$)
+		{\includegraphics[width=2.5cm]{logo.png}};
+	\end{tikzpicture}
 \end{frame}
 
 
